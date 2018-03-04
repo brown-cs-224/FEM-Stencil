@@ -1,15 +1,13 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "engine/util/CommonIncludes.h"
+#include "simulation.h"
+#include "graphics/camera.h"
 
 #include <QGLWidget>
 #include <QTime>
 #include <QTimer>
 #include <memory>
-
-class Graphics;
-class Camera;
 
 /**
  * This is similar to your "CS1971FrontEnd" class. Here you will receive all of the input events
@@ -45,18 +43,11 @@ private:
     QWidget *m_window;
     QTime m_time;
     QTimer m_timer;
-    bool m_captureMouse;
 
-    float m_fps;
-    int m_frameIndex;
-    float m_frameTimes[FRAMES_TO_AVERAGE];
+    Simulation m_sim;
+    Camera m_camera;
 
-    Graphics* m_graphics;
-
-    // TODO (Warmup 1): You might want to remove this after completing the lab
-    std::shared_ptr<Camera> m_camera;
-
-    // TODO (Warmup 1): Add an application variable to the View class
+    int m_forward, m_sideways, m_vertical;
 
 private slots:
     void tick();
