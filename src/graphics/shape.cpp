@@ -2,9 +2,12 @@
 
 #include <iostream>
 
+#include "graphics/Shader.h"
+
 Shape::Shape()
     : m_numVertices(),
-      m_verticesSize()
+      m_verticesSize(),
+      m_modelMatrix(Eigen::Matrix4f::Identity())
 {
 }
 
@@ -127,6 +130,11 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Shape::setModelMatrix(const Eigen::Affine3f &model)
+{
+    m_modelMatrix = model.matrix();
+}
+
 void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals)
 {
     if(vertices.size() != normals.size()) {
@@ -143,8 +151,10 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std:
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Shape::draw()
+void Shape::draw(Shader *shader)
 {
+    shader->setUniform("m", m_modelMatrix);
+    std::cout << m_modelMatrix << std::endl;
     glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, m_numVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
     glBindVertexArray(0);

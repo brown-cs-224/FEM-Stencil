@@ -50,7 +50,7 @@ void View::initializeGL()
     m_sim.init();
 
     m_camera.setPosition(Eigen::Vector3f(0, 0, 5));
-    m_camera.lookAt(Eigen::Vector3f(0, 0, -5), Eigen::Vector3f(0, 0, 0), Eigen::Vector3f(0, 1, 0));
+    m_camera.lookAt(Eigen::Vector3f(0, 2, -5), Eigen::Vector3f(0, 2, 0), Eigen::Vector3f(0, 1, 0));
     m_camera.setPerspective(120, width() / static_cast<float>(height()), 0.1, 50);
 
     m_time.start();
@@ -62,10 +62,10 @@ void View::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_shader->bind();
     Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
-    Eigen::Matrix4f mvp = m_camera.getProjection() * m_camera.getView() * model;
+    Eigen::Matrix4f mvp = m_camera.getProjection() * m_camera.getView();
     m_shader->setUniform("m", model);
-    m_shader->setUniform("mvp", mvp);
-    m_sim.draw();
+    m_shader->setUniform("vp", mvp);
+    m_sim.draw(m_shader);
     m_shader->unbind();
 }
 
@@ -87,7 +87,7 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
     if(m_capture) {
         if(deltaX != 0 || deltaY != 0) {
-            m_camera.rotate(-deltaX * 0.01, -deltaY * 0.01f);
+            m_camera.rotate(-deltaX * 0.01, deltaY * 0.01f);
             QCursor::setPos(mapToGlobal(QPoint(m_lastX, m_lastY)));
         }
     } else {
@@ -134,10 +134,10 @@ void View::keyPressEvent(QKeyEvent *event)
         m_sideways += 1;
     }
     else if(event->key() == Qt::Key_Q) {
-        m_vertical += 1;
+        m_vertical -= 1;
     }
     else if(event->key() == Qt::Key_E) {
-        m_vertical -= 1;
+        m_vertical += 1;
     }
 }
 
@@ -165,10 +165,10 @@ void View::keyReleaseEvent(QKeyEvent *event)
         m_sideways -= 1;
     }
     else if(event->key() == Qt::Key_Q) {
-        m_vertical -= 1;
+        m_vertical += 1;
     }
     else if(event->key() == Qt::Key_E) {
-        m_vertical += 1;
+        m_vertical -= 1;
     }
 }
 

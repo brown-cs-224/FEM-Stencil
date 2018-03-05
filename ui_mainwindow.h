@@ -53,7 +53,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "Warm-up", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "simulation", Q_NULLPTR));
     } // retranslateUi
 
 };

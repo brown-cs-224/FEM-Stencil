@@ -6,6 +6,8 @@
 
 #include <Eigen/Dense>
 
+class Shader;
+
 class Shape
 {
 public:
@@ -17,7 +19,9 @@ public:
     void setVertices(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals);
     void setVertices(const std::vector<Eigen::Vector3f> &vertices);
 
-    void draw();
+    void setModelMatrix(const Eigen::Affine3f &model);
+
+    void draw(Shader *shader);
 
 private:
     GLuint m_vao;
@@ -27,6 +31,8 @@ private:
     unsigned int m_numVertices;
     unsigned int m_verticesSize;
     std::vector<Eigen::Vector3i> m_faces;
+
+    Eigen::Matrix4f m_modelMatrix;
 };
 
 #endif // SHAPE_H

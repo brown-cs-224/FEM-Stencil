@@ -110,11 +110,11 @@ const Eigen::Matrix4f &Camera::getView()
             pos = m_position;
         }
         Eigen::Matrix3f R;
-        R.col(2) = m_look.normalized();
+        R.col(2) = -m_look.normalized();
         R.col(0) = m_up.cross(R.col(2)).normalized();
         R.col(1) = R.col(2).cross(R.col(0));
         m_view.topLeftCorner<3, 3>() = R.transpose();
-        m_view.topRightCorner<3, 1>() = R.transpose() * pos;
+        m_view.topRightCorner<3, 1>() = -R.transpose() * pos;
         m_view(3, 3) = 1.f;
     }
     return m_view;
