@@ -154,7 +154,6 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std:
 void Shape::draw(Shader *shader)
 {
     shader->setUniform("m", m_modelMatrix);
-    std::cout << m_modelMatrix << std::endl;
     glBindVertexArray(m_vao);
     glDrawElements(GL_TRIANGLES, m_numVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
     glBindVertexArray(0);

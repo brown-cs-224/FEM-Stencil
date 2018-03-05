@@ -18,7 +18,7 @@ void Simulation::init()
     std::vector<tinyobj::material_t> materials;
     std::string err;
     bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err,
-                                "C:/Users/Graphics Lab/Documents/Tyler/cs224-pathtracing-stencil/path-stencil/example-scenes/models/Sphere.obj", nullptr, true);
+                                "example-surfaces/Sphere.obj", nullptr, true);
     if(!ret) {
         std::cout << err << std::endl;
         return;
