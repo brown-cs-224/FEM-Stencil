@@ -13,8 +13,8 @@
 
 class Shader {
 public:
-    Shader(const std::string &vertexSource, const std::string &fragmentSource);
-    Shader(const std::string &vertexSource, const std::string &geometrySource, const std::string &fragmentSource);
+    Shader(const std::string &vertexPath, const std::string &fragmentPath);
+    Shader(const std::string &vertexPath, const std::string &geometryPath, const std::string &fragmentPath);
 
     Shader(Shader &that) = delete;
     Shader& operator=(Shader &that) = delete;
@@ -56,6 +56,8 @@ public:
     void resetDebug();
 
 private:
+
+    std::string getFileContents(std::string path);
 
     GLuint createFragmentShaderFromSource(const std::string &source);
     GLuint createGeometryShaderFromSource(const std::string &source);

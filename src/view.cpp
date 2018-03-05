@@ -12,7 +12,9 @@ using namespace std;
 View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
     m_window(parent->parentWidget()),
     m_time(), m_timer(),
-    m_forward(), m_sideways(), m_vertical()
+    m_forward(), m_sideways(), m_vertical(),
+    m_lastX(), m_lastY(),
+    m_capture(false)
 {
     // View needs all mouse move events, not just mouse drag events
     setMouseTracking(true);
@@ -29,18 +31,24 @@ View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
 
 View::~View()
 {
+    delete m_shader;
 }
 
 void View::initializeGL()
 {
+    glewExperimental = GL_TRUE;
+    if(glewInit() != GLEW_OK) {
+        std::cerr << "glew initialization failed" << std::endl;
+    }
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
     glClearColor(0, 0, 0, 1);
 
-    // Start a timer that will try to get 60 frames per second (the actual
-    // frame rate depends on the operating system and other running programs)
+    m_shader = new Shader(":/shaders/shader.vert", ":/shaders/shader.frag");
+    m_sim.init();
+
     m_time.start();
     m_timer.start(1000 / 60);
 }
@@ -48,7 +56,13 @@ void View::initializeGL()
 void View::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_shader->bind();
+    Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
+    Eigen::Matrix4f mvp = m_camera.getProjection() * m_camera.getView() * model;
+    m_shader->setUniform("m", model);
+    m_shader->setUniform("mvp", mvp);
     m_sim.draw();
+    m_shader->unbind();
 }
 
 void View::resizeGL(int w, int h)
@@ -57,16 +71,30 @@ void View::resizeGL(int w, int h)
     m_camera.setAspect(static_cast<float>(w) / h);
 }
 
-void View::mousePressEvent(QMouseEvent *event)
+void View::mousePressEvent(QMouseEvent *)
 {
+    m_capture = true;
 }
 
 void View::mouseMoveEvent(QMouseEvent *event)
 {
+    int deltaX = event->x() - m_lastX;
+    int deltaY = event->y() - m_lastY;
+
+    if(m_capture) {
+        if(deltaX != 0 || deltaY != 0) {
+            m_camera.rotate(-deltaX * 0.1f, -deltaY * 0.1f);
+            QCursor::setPos(mapToGlobal(QPoint(m_lastX, m_lastY)));
+        }
+    }
+
+    m_lastX = event->x();
+    m_lastY = event->y();
 }
 
-void View::mouseReleaseEvent(QMouseEvent *event)
+void View::mouseReleaseEvent(QMouseEvent *)
 {
+    m_capture = false;
 }
 
 void View::wheelEvent(QWheelEvent *event)

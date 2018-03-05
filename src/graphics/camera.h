@@ -6,6 +6,7 @@
 class Camera
 {
 public:
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
     Camera();
 
     void setPosition(const Eigen::Vector3f &pos);

@@ -3,6 +3,7 @@
 
 #include "simulation.h"
 #include "graphics/camera.h"
+#include "graphics/Shader.h"
 
 #include <QGLWidget>
 #include <QTime>
@@ -46,8 +47,13 @@ private:
 
     Simulation m_sim;
     Camera m_camera;
+    Shader *m_shader;
 
     int m_forward, m_sideways, m_vertical;
+
+    int m_lastX, m_lastY;
+
+    bool m_capture;
 
 private slots:
     void tick();

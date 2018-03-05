@@ -1,27 +1,30 @@
 #include "Shader.h"
 
+#include <QFile>
+#include <QString>
+#include <QTextStream>
 #include <algorithm>
 #include <iostream>
 #include <utility>
 
 #include "GraphicsDebug.h"
 
-Shader::Shader(const std::string &vertexSource, const std::string &fragmentSource)
+Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
 {
     createProgramID();
     std::vector<GLuint> shaders;
-    shaders.push_back(createVertexShaderFromSource(vertexSource));
-    shaders.push_back(createFragmentShaderFromSource(fragmentSource));
+    shaders.push_back(createVertexShaderFromSource(getFileContents(vertexPath)));
+    shaders.push_back(createFragmentShaderFromSource(getFileContents(fragmentPath)));
     buildShaderProgramFromShaders(shaders);
     discoverShaderData();
 }
 
-Shader::Shader(const std::string &vertexSource, const std::string &geometrySource, const std::string &fragmentSource) {
+Shader::Shader(const std::string &vertexPath, const std::string &geometryPath, const std::string &fragmentPath) {
     createProgramID();
     std::vector<GLuint> shaders;
-    shaders.push_back(createVertexShaderFromSource(vertexSource));
-    shaders.push_back(createGeometryShaderFromSource(geometrySource));
-    shaders.push_back(createFragmentShaderFromSource(fragmentSource));
+    shaders.push_back(createVertexShaderFromSource(getFileContents(vertexPath)));
+    shaders.push_back(createGeometryShaderFromSource(getFileContents(geometryPath)));
+    shaders.push_back(createFragmentShaderFromSource(getFileContents(fragmentPath)));
     buildShaderProgramFromShaders(shaders);
     discoverShaderData();
 }
@@ -265,5 +268,18 @@ void Shader::resetDebug() {
     for(auto &pair : m_trackedTextures) {
         m_trackedTextures[pair.first] = false;
     }
+}
+
+std::string Shader::getFileContents(std::string path)
+{
+    QString qpath = QString::fromStdString(path);
+    QFile file(qpath);
+
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream stream(&file);
+        QString contents = stream.readAll();
+        return contents.toStdString();
+    }
+    return "";
 }
 
