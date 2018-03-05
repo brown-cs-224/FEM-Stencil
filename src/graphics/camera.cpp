@@ -25,8 +25,11 @@ void Camera::move(const Eigen::Vector3f &move)
 
 void Camera::rotate(float x, float y)
 {
+
     m_yaw += x;
     m_pitch += y;
+    m_pitch = m_pitch >= M_PI_2 ? M_PI_2 - 0.01 : m_pitch;
+    m_pitch = m_pitch <= -M_PI_2 ? -M_PI_2 + 0.01 : m_pitch;
     m_viewDirty = true;
     updateLook();
 }
@@ -111,7 +114,7 @@ const Eigen::Matrix4f &Camera::getView()
         R.col(0) = m_up.cross(R.col(2)).normalized();
         R.col(1) = R.col(2).cross(R.col(0));
         m_view.topLeftCorner<3, 3>() = R.transpose();
-        m_view.topRightCorner<3, 1>() = -R.transpose() * pos;
+        m_view.topRightCorner<3, 1>() = R.transpose() * pos;
         m_view(3, 3) = 1.f;
     }
     return m_view;

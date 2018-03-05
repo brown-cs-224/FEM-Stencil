@@ -44,10 +44,14 @@ void View::initializeGL()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    glClearColor(0, 0, 0, 1);
+    glClearColor(0.5f, 0.5f, 0.5f, 1);
 
     m_shader = new Shader(":/shaders/shader.vert", ":/shaders/shader.frag");
     m_sim.init();
+
+    m_camera.setPosition(Eigen::Vector3f(0, 0, 5));
+    m_camera.lookAt(Eigen::Vector3f(0, 0, -5), Eigen::Vector3f(0, 0, 0), Eigen::Vector3f(0, 1, 0));
+    m_camera.setPerspective(120, width() / static_cast<float>(height()), 0.1, 50);
 
     m_time.start();
     m_timer.start(1000 / 60);
@@ -83,13 +87,13 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
     if(m_capture) {
         if(deltaX != 0 || deltaY != 0) {
-            m_camera.rotate(-deltaX * 0.1f, -deltaY * 0.1f);
+            m_camera.rotate(-deltaX * 0.01, -deltaY * 0.01f);
             QCursor::setPos(mapToGlobal(QPoint(m_lastX, m_lastY)));
         }
+    } else {
+        m_lastX = event->x();
+        m_lastY = event->y();
     }
-
-    m_lastX = event->x();
-    m_lastY = event->y();
 }
 
 void View::mouseReleaseEvent(QMouseEvent *)
