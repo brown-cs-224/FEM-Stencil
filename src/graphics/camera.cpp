@@ -1,12 +1,18 @@
 #include "camera.h"
 
+#include <iostream>
+
 Camera::Camera()
     : m_pitch(0), m_yaw(0),
       m_look(0, 0, 1),
+      m_target(0, 0, 0),
       m_up(0, 1, 0),
       m_viewDirty(true), m_projDirty(true),
       m_fovY(90), m_aspect(1), m_near(0.1f), m_far(50.f),
-      m_zoom(1), m_orbit(false)
+      m_zoom(1),
+      m_view(Eigen::Matrix4f::Identity()),
+      m_proj(Eigen::Matrix4f::Identity()),
+      m_orbit(false)
 {
 
 }
@@ -19,6 +25,9 @@ void Camera::setPosition(const Eigen::Vector3f &pos)
 
 void Camera::move(const Eigen::Vector3f &move)
 {
+    if(move.dot(move) == 0) {
+        return;
+    }
     m_position += move;
     m_viewDirty = true;
 }
@@ -110,12 +119,17 @@ const Eigen::Matrix4f &Camera::getView()
             pos = m_position;
         }
         Eigen::Matrix3f R;
-        R.col(2) = -m_look.normalized();
-        R.col(0) = m_up.cross(R.col(2)).normalized();
-        R.col(1) = R.col(2).cross(R.col(0));
+        Eigen::Vector3f f = m_look.normalized();
+        Eigen::Vector3f u = m_up.normalized();
+        Eigen::Vector3f s = f.cross(u).normalized();
+        u = s.cross(f);
+        R.col(0) = s;
+        R.col(1) = u;
+        R.col(2) = -f;
         m_view.topLeftCorner<3, 3>() = R.transpose();
         m_view.topRightCorner<3, 1>() = -R.transpose() * pos;
         m_view(3, 3) = 1.f;
+        m_viewDirty = false;
     }
     return m_view;
 }
@@ -131,7 +145,8 @@ const Eigen::Matrix4f &Camera::getProjection()
         m_proj(2, 2) = -(m_near + m_far) * invRange;
         m_proj(3, 2) = -1;
         m_proj(2, 3) = -2 * m_near * m_far * invRange;
-        m_proj(3, 3) = invtan / m_aspect;
+        m_proj(3, 3) = 0;
+        m_projDirty = false;
     }
     return m_proj;
 }
