@@ -15,24 +15,33 @@ public:
 
     void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles);
     void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles);
+    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices);
 
     void setVertices(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals);
     void setVertices(const std::vector<Eigen::Vector3f> &vertices);
 
     void setModelMatrix(const Eigen::Affine3f &model);
 
+    void toggleWireframe();
+
     void draw(Shader *shader);
 
 private:
-    GLuint m_vao;
-    GLuint m_vbo;
-    GLuint m_ibo;
+    GLuint m_surfaceVao;
+    GLuint m_tetVao;
+    GLuint m_surfaceVbo;
+    GLuint m_tetVbo;
+    GLuint m_surfaceIbo;
+    GLuint m_tetIbo;
 
-    unsigned int m_numVertices;
+    unsigned int m_numSurfaceVertices;
+    unsigned int m_numTetVertices;
     unsigned int m_verticesSize;
     std::vector<Eigen::Vector3i> m_faces;
 
     Eigen::Matrix4f m_modelMatrix;
+
+    bool m_wireframe;
 };
 
 #endif // SHAPE_H

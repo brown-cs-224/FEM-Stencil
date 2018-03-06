@@ -278,6 +278,7 @@ std::string Shader::getFileContents(std::string path)
     if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream stream(&file);
         QString contents = stream.readAll();
+        file.close();
         return contents.toStdString();
     }
     return "";

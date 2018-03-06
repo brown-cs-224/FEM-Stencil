@@ -16,8 +16,8 @@ public:
 
     void draw(Shader *shader);
 
+    void toggleWire();
 private:
-    std::vector<Eigen::Vector3f> m_vertices;
     Shape m_shape;
 
     Shape m_ground;

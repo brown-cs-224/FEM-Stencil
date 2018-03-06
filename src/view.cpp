@@ -51,6 +51,7 @@ void View::initializeGL()
 
     m_camera.setPosition(Eigen::Vector3f(0, 0, 5));
     m_camera.lookAt(Eigen::Vector3f(0, 2, -5), Eigen::Vector3f(0, 2, 0), Eigen::Vector3f(0, 1, 0));
+    m_camera.setTarget(Eigen::Vector3f(0, 2, 0));
     m_camera.setPerspective(120, width() / static_cast<float>(height()), 0.1, 50);
 
     m_time.start();
@@ -138,6 +139,8 @@ void View::keyPressEvent(QKeyEvent *event)
     }
     else if(event->key() == Qt::Key_E) {
         m_vertical += 1;
+    } else if(event->key() == Qt::Key_T) {
+        m_sim.toggleWire();
     }
 }
 

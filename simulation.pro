@@ -29,7 +29,8 @@ SOURCES += \
     src/graphics/GraphicsDebug.cpp \
     src/simulation.cpp \
     src/graphics/shape.cpp \
-    src/graphics/camera.cpp
+    src/graphics/camera.cpp \
+    src/graphics/MeshLoader.cpp
 
 HEADERS += \
     libs/glew-1.10.0/include/GL/glew.h \
@@ -177,7 +178,8 @@ HEADERS += \
     libs/Eigen/src/Core/Visitor.h \
     libs/Eigen/Dense \
     libs/unsupported/Eigen/OpenGLSupport \
-    ui_mainwindow.h
+    ui_mainwindow.h \
+    src/graphics/MeshLoader.h
 
 FORMS += src/mainwindow.ui
 
