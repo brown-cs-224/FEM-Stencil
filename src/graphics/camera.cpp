@@ -102,11 +102,13 @@ void Camera::setAspect(float aspect)
 void Camera::zoom(float zoom)
 {
     m_zoom *= zoom;
+    m_viewDirty = true;
 }
 
 void Camera::setZoom(float zoom)
 {
     m_zoom = zoom;
+    m_viewDirty = true;
 }
 
 const Eigen::Matrix4f &Camera::getView()
@@ -159,11 +161,13 @@ const Eigen::Vector3f &Camera::getLook()
 void Camera::setOrbit(bool orbit)
 {
     m_orbit = orbit;
+    m_viewDirty = true;
 }
 
 void Camera::toggleOrbit()
 {
     m_orbit = !m_orbit;
+    m_viewDirty = true;
 }
 
 bool Camera::isOrbit()

@@ -76,9 +76,11 @@ void View::resizeGL(int w, int h)
     m_camera.setAspect(static_cast<float>(w) / h);
 }
 
-void View::mousePressEvent(QMouseEvent *)
+void View::mousePressEvent(QMouseEvent *event)
 {
     m_capture = true;
+    m_lastX = event->x();
+    m_lastY = event->y();
 }
 
 void View::mouseMoveEvent(QMouseEvent *event)
@@ -88,13 +90,11 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
     if(m_capture) {
         if(deltaX != 0 || deltaY != 0) {
-            m_camera.rotate(-deltaX * 0.01, deltaY * 0.01f);
-            QCursor::setPos(mapToGlobal(QPoint(m_lastX, m_lastY)));
+            m_camera.rotate(-deltaX * 0.01f, deltaY * 0.01f);
         }
-    } else {
-        m_lastX = event->x();
-        m_lastY = event->y();
     }
+    m_lastX = event->x();
+    m_lastY = event->y();
 }
 
 void View::mouseReleaseEvent(QMouseEvent *)
