@@ -12,10 +12,18 @@ Simulation::Simulation()
 
 void Simulation::init()
 {
-    //TODO students: replace this example code with loading a mesh and extracting the surface
+    // STUDENTS: This code loads up the tetrahedral mesh in 'example-meshes/single-tet.mesh'
+    //    (note: your working directory must be set to the root directory of the starter code
+    //    repo for this file to load correctly). You'll probably want to instead have this code
+    //    load up a tet mesh based on e.g. a file path specified with a command line argument.
     std::vector<Vector3f> vertices;
     std::vector<Vector4i> tets;
     if(MeshLoader::loadTetMesh("example-meshes/single-tet.mesh", vertices, tets)) {
+        // STUDENTS: This code computes the surface mesh of the loaded tet mesh, i.e. the faces
+        //    of tetrahedra which are on the exterior surface of the object. Right now, this is
+        //    hard-coded for the single-tet mesh. You'll need to implement surface mesh extraction
+        //    for arbitrary tet meshes. Think about how you can identify which tetrahedron faces
+        //    are surface faces...
         std::vector<Vector3i> faces;
         faces.emplace_back(0, 1, 2);
         faces.emplace_back(0, 2, 3);
@@ -30,7 +38,14 @@ void Simulation::init()
 
 void Simulation::update(float seconds)
 {
-    //TODO students: calculate the vertices and the surface and call m_shape.setVertices with the new vertices
+    // STUDENTS: This method should contain all the time-stepping logic for your simulation.
+    //   Specifically, the code you write here should compute new, updated vertex positions for your
+    //   simulation mesh, and it should then call m_shape.setVertices to update the display with those
+    //   newly-updated vertices.
+
+    // STUDENTS: As currently written, the program will just continually compute simulation timesteps as long
+    //    as the program is running (see View::tick in view.cpp) . You might want to e.g. add a hotkey for pausing
+    //    the simulation, and perhaps start the simulation out in a paused state.
 }
 
 void Simulation::draw(Shader *shader)
