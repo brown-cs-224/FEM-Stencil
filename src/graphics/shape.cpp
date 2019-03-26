@@ -4,18 +4,17 @@
 
 #include "graphics/Shader.h"
 
-using namespace Eigen;
 
 Shape::Shape()
     : m_tetVao(-1),
       m_numSurfaceVertices(),
       m_verticesSize(),
-      m_modelMatrix(Eigen::Matrix4f::Identity()),
+      m_modelMatrix(glm::mat4x4(1.f)),
       m_wireframe(false)
 {
 }
 
-void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles)
+void Shape::init(const std::vector<glm::vec3> &vertices, const std::vector<glm::vec3> &normals, const std::vector<glm::ivec3> &triangles)
 {
     if(vertices.size() != normals.size()) {
         std::cerr << "Vertices and normals are not the same size" << std::endl;
@@ -51,22 +50,22 @@ void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector
     m_faces = triangles;
 }
 
-void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles)
+void Shape::init(const std::vector<glm::vec3> &vertices, const std::vector<glm::ivec3> &triangles)
 {
-    std::vector<Eigen::Vector3f> verts;
-    std::vector<Eigen::Vector3f> normals;
-    std::vector<Eigen::Vector3i> faces;
+    std::vector<glm::vec3> verts;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::ivec3> faces;
     verts.reserve(triangles.size() * 3);
     normals.reserve(triangles.size() * 3);
     for(auto& f : triangles) {
         auto& v1 = vertices[f[0]];
         auto& v2 = vertices[f[1]];
         auto& v3 = vertices[f[2]];
-        auto& e1 = v2 - v1;
-        auto& e2 = v3 - v1;
-        auto n = e1.cross(e2);
+        auto e1 = v2 - v1;
+        auto e2 = v3 - v1;
+        auto n = glm::cross(e1, e2);
         int s = verts.size();
-        faces.push_back(Eigen::Vector3i(s, s + 1, s + 2));
+        faces.push_back(glm::ivec3(s, s + 1, s + 2));
         normals.push_back(n);
         normals.push_back(n);
         normals.push_back(n);
@@ -104,12 +103,12 @@ void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector
     m_faces = triangles;
 }
 
-void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices)
+void Shape::init(const std::vector<glm::vec3> &vertices, const std::vector<glm::ivec3> &triangles, const std::vector<glm::ivec4> &tetIndices)
 {
     init(vertices, triangles);
 
-    std::vector<Eigen::Vector2i> lines;
-    for(Vector4i tet : tetIndices) {
+    std::vector<glm::ivec2> lines;
+    for(glm::ivec4 tet : tetIndices) {
         lines.emplace_back(tet[0], tet[1]);
         lines.emplace_back(tet[0], tet[2]);
         lines.emplace_back(tet[0], tet[3]);
@@ -141,23 +140,23 @@ void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector
     m_numTetVertices = lines.size() * 2;
 }
 
-void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices)
+void Shape::setVertices(const std::vector<glm::vec3> &vertices)
 {
     if(vertices.size() != m_verticesSize) {
         std::cerr << "You can't set vertices to a vector that is a different length that what shape was inited with" << std::endl;
         return;
     }
-    std::vector<Eigen::Vector3f> verts;
-    std::vector<Eigen::Vector3f> normals;
+    std::vector<glm::vec3> verts;
+    std::vector<glm::vec3> normals;
     verts.reserve(m_faces.size() * 3);
     normals.reserve(m_faces.size() * 3);
     for(auto& f : m_faces) {
         auto& v1 = vertices[f[0]];
         auto& v2 = vertices[f[1]];
         auto& v3 = vertices[f[2]];
-        auto& e1 = v2 - v1;
-        auto& e2 = v3 - v1;
-        auto n = e1.cross(e2);
+        auto e1 = v2 - v1;
+        auto e2 = v3 - v1;
+        auto n = glm::cross(e1, e2);
         normals.push_back(n);
         normals.push_back(n);
         normals.push_back(n);
@@ -168,16 +167,25 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices)
     glBindBuffer(GL_ARRAY_BUFFER, m_surfaceVbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * verts.size() * 3, static_cast<const void *>(verts.data()));
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * verts.size() * 3, sizeof(float) * verts.size() * 3, static_cast<const void *>(normals.data()));
-    if(m_tetVao != -1) {
+    //if(m_tetVao != -1) {
         glBindBuffer(GL_ARRAY_BUFFER, m_tetVbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * vertices.size() * 3, static_cast<const void *>(verts.data()));
-    }
+    //}
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Shape::setModelMatrix(const Eigen::Affine3f &model)
+void Shape::setModelMatrix(const glm::mat4x4 &model)
 {
-    m_modelMatrix = model.matrix();
+    m_modelMatrix = model;
+    m_invModelMatrix = glm::inverse(model);
+}
+
+glm::mat4x4 Shape::getModelMatrix() {
+    return m_modelMatrix;
+}
+
+glm::mat4x4 Shape::getInverseModelMatrix() {
+    return m_invModelMatrix;
 }
 
 void Shape::toggleWireframe()
@@ -185,7 +193,7 @@ void Shape::toggleWireframe()
     m_wireframe = !m_wireframe;
 }
 
-void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals)
+void Shape::setVertices(const std::vector<glm::vec3> &vertices, const std::vector<glm::vec3> &normals)
 {
     if(vertices.size() != normals.size()) {
         std::cerr << "Vertices and normals are not the same size" << std::endl;
@@ -203,7 +211,7 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std:
 
 void Shape::draw(Shader *shader)
 {
-    if(m_wireframe && m_tetVao != -1) {
+    if(m_wireframe /*&& m_tetVao != -1*/) {
         shader->setUniform("wire", 1);
         shader->setUniform("m", m_modelMatrix);
         glBindVertexArray(m_tetVao);

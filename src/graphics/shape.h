@@ -2,15 +2,8 @@
 #define SHAPE_H
 
 #include <GL/glew.h>
+#include <glm.hpp>
 #include <vector>
-
-#define EIGEN_DONT_VECTORIZE
-#define EIGEN_DISABLE_UNALIGHNED_ARRAY_ASSERT
-#include <Eigen/StdVector>
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix2f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3i)
-#include <Eigen/Dense>
 
 class Shader;
 
@@ -19,14 +12,16 @@ class Shape
 public:
     Shape();
 
-    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles);
-    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles);
-    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices);
+    void init(const std::vector<glm::vec3> &vertices, const std::vector<glm::vec3> &normals, const std::vector<glm::ivec3> &triangles);
+    void init(const std::vector<glm::vec3> &vertices, const std::vector<glm::ivec3> &triangles);
+    void init(const std::vector<glm::vec3> &vertices, const std::vector<glm::ivec3> &triangles, const std::vector<glm::ivec4> &tetIndices);
 
-    void setVertices(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals);
-    void setVertices(const std::vector<Eigen::Vector3f> &vertices);
+    void setVertices(const std::vector<glm::vec3> &vertices, const std::vector<glm::vec3> &normals);
+    void setVertices(const std::vector<glm::vec3> &vertices);
 
-    void setModelMatrix(const Eigen::Affine3f &model);
+    void setModelMatrix(const glm::mat4x4 &model);
+    glm::mat4x4 getModelMatrix();
+    glm::mat4x4 getInverseModelMatrix();
 
     void toggleWireframe();
 
@@ -43,9 +38,9 @@ private:
     unsigned int m_numSurfaceVertices;
     unsigned int m_numTetVertices;
     unsigned int m_verticesSize;
-    std::vector<Eigen::Vector3i> m_faces;
+    std::vector<glm::ivec3> m_faces;
 
-    Eigen::Matrix4f m_modelMatrix;
+    glm::mat4x4 m_modelMatrix, m_invModelMatrix;
 
     bool m_wireframe;
 };

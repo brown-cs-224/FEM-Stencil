@@ -6,9 +6,11 @@
 #include <tuple>
 #include <vector>
 
+#define GLM_FORCE_RADIANS
+
 #include "GL/glew.h"
-#include "Eigen/Dense"
-#include <unsupported/Eigen/OpenGLSupport>
+#include "gtc/type_ptr.hpp"
+#include "glm.hpp"
 
 
 class Shader {
@@ -25,27 +27,37 @@ public:
     GLuint getUniformLocation(std::string name);
     GLuint getEnumeratedUniformLocation(std::string name, int index);
 
-    template<typename type, int n, int m>
-    void setUniform(const std::string &name, const Eigen::Matrix<type, n, m> &mat) {
-        glUniform(m_uniforms[name], mat);
-    }
-
     void setUniform(const std::string &name, float f);
+    void setUniform(const std::string &name, const glm::vec2 &vec2);
+    void setUniform(const std::string &name, const glm::vec3 &vec3);
+    void setUniform(const std::string &name, const glm::vec4 &vec4);
     void setUniform(const std::string &name, int i);
+    void setUniform(const std::string &name, const glm::ivec2 &ivec2);
+    void setUniform(const std::string &name, const glm::ivec3 &ivec3);
+    void setUniform(const std::string &name, const glm::ivec4 &ivec4);
     void setUniform(const std::string &name, bool b);
+    void setUniform(const std::string &name, const glm::bvec2 &bvec2);
+    void setUniform(const std::string &name, const glm::bvec3 &bvec3);
+    void setUniform(const std::string &name, const glm::bvec4 &bvec4);
+    void setUniform(const std::string &name, const glm::mat2 &mat2);
+    void setUniform(const std::string &name, const glm::mat3 &mat3);
+    void setUniform(const std::string &name, const glm::mat4 &mat4);
 
     void setUniformArrayByIndex(const std::string &name, float f, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Vector2f &vec2, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Vector3f &vec3, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Vector4f &vec4, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::vec2 &vec2, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::vec3 &vec3, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::vec4 &vec4, size_t index);
     void setUniformArrayByIndex(const std::string &name, int i, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Vector2i &ivec2, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Vector3i &ivec3, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Vector4i &ivec4, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::ivec2 &ivec2, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::ivec3 &ivec3, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::ivec4 &ivec4, size_t index);
     void setUniformArrayByIndex(const std::string &name, bool b, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Matrix2f &mat2, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Matrix3f &mat3, size_t index);
-    void setUniformArrayByIndex(const std::string &name, const Eigen::Matrix4f &mat4, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::bvec2 &bvec2, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::bvec3 &bvec3, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::bvec4 &bvec4, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::mat2 &mat2, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::mat3 &mat3, size_t index);
+    void setUniformArrayByIndex(const std::string &name, const glm::mat4 &mat4, size_t index);
 
 
     void bind() const;

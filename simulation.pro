@@ -190,8 +190,8 @@ DISTFILES += \
     res/shaders/shader.vert \
     res/shaders/shader.frag
 
-INCLUDEPATH += src libs glm libs/glew-1.10.0/include
-DEPENDPATH += src libs glm libs/glew-1.10.0/include
+INCLUDEPATH += src libs libs/glm libs/glew-1.10.0/include
+DEPENDPATH += src libs libs/glm libs/glew-1.10.0/include
 
 # Don't add the -pg flag unless you know what you are doing. It makes QThreadPool freeze on Mac OS X
 QMAKE_CXXFLAGS_RELEASE -= -O2

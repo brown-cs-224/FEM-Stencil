@@ -75,24 +75,120 @@ void Shader::setUniform(const std::string &name, float f) {
     glUniform1f(m_uniforms[name], f);
 }
 
+void Shader::setUniform(const std::string &name, const glm::vec2 &vec2) {
+    glUniform2fv(m_uniforms[name], 1, glm::value_ptr(vec2));
+}
+
+void Shader::setUniform(const std::string &name, const glm::vec3 &vec3) {
+    glUniform3fv(m_uniforms[name], 1, glm::value_ptr(vec3));
+}
+
+void Shader::setUniform(const std::string &name, const glm::vec4 &vec4) {
+    glUniform4fv(m_uniforms[name], 1, glm::value_ptr(vec4));
+}
+
 void Shader::setUniform(const std::string &name, int i) {
     glUniform1i(m_uniforms[name], i);
+}
+
+void Shader::setUniform(const std::string &name, const glm::ivec2 &ivec2) {
+    glUniform2iv(m_uniforms[name], 1, glm::value_ptr(ivec2));
+}
+
+void Shader::setUniform(const std::string &name, const glm::ivec3 &ivec3) {
+    glUniform3iv(m_uniforms[name], 1, glm::value_ptr(ivec3));
+}
+
+void Shader::setUniform(const std::string &name, const glm::ivec4 &ivec4) {
+    glUniform4iv(m_uniforms[name], 1, glm::value_ptr(ivec4));
 }
 
 void Shader::setUniform(const std::string &name, bool b) {
     glUniform1i(m_uniforms[name], static_cast<GLint>(b));
 }
 
+void Shader::setUniform(const std::string &name, const glm::bvec2 &bvec2) {
+    glUniform2iv(m_uniforms[name], 1, glm::value_ptr(glm::ivec2(bvec2)));
+}
+
+void Shader::setUniform(const std::string &name, const glm::bvec3 &bvec3) {
+    glUniform3iv(m_uniforms[name], 1, glm::value_ptr(glm::ivec3(bvec3)));
+}
+
+void Shader::setUniform(const std::string &name, const glm::bvec4 &bvec4) {
+    glUniform4iv(m_uniforms[name], 1, glm::value_ptr(glm::ivec4(bvec4)));
+}
+
+void Shader::setUniform(const std::string &name, const glm::mat2 &mat2) {
+    glUniformMatrix2fv(m_uniforms[name], 1, GL_FALSE, glm::value_ptr(mat2));
+}
+
+void Shader::setUniform(const std::string &name, const glm::mat3 &mat3) {
+    glUniformMatrix3fv(m_uniforms[name], 1, GL_FALSE, glm::value_ptr(mat3));
+}
+
+void Shader::setUniform(const std::string &name, const glm::mat4 &mat4) {
+    glUniformMatrix4fv(m_uniforms[name], 1, GL_FALSE, glm::value_ptr(mat4));
+}
+
 void Shader::setUniformArrayByIndex(const std::string &name, float f, size_t index) {
     glUniform1f(m_uniformArrays[std::make_tuple(name, index)], f);
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::vec2 &vec2, size_t index) {
+    glUniform2fv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(vec2));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::vec3 &vec3, size_t index) {
+    glUniform3fv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(vec3));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::vec4 &vec4, size_t index) {
+    glUniform4fv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(vec4));
 }
 
 void Shader::setUniformArrayByIndex(const std::string &name, int i, size_t index) {
     glUniform1i(m_uniformArrays[std::make_tuple(name, index)], i);
 }
 
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::ivec2 &ivec2, size_t index) {
+    glUniform2iv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(ivec2));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::ivec3 &ivec3, size_t index) {
+    glUniform3iv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(ivec3));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::ivec4 &ivec4, size_t index) {
+    glUniform4iv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(ivec4));
+}
+
 void Shader::setUniformArrayByIndex(const std::string &name, bool b, size_t index) {
     glUniform1i(m_uniformArrays[std::make_tuple(name, index)], static_cast<GLint>(b));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::bvec2 &bvec2, size_t index) {
+    glUniform2iv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(glm::ivec2(bvec2)));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::bvec3 &bvec3, size_t index) {
+    glUniform3iv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(glm::ivec3(bvec3)));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::bvec4 &bvec4, size_t index) {
+    glUniform4iv(m_uniformArrays[std::make_tuple(name, index)], 1, glm::value_ptr(glm::ivec4(bvec4)));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::mat2 &mat2, size_t index) {
+    glUniformMatrix2fv(m_uniformArrays[std::make_tuple(name, index)], 1, GL_FALSE, glm::value_ptr(mat2));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::mat3 &mat3, size_t index) {
+    glUniformMatrix3fv(m_uniformArrays[std::make_tuple(name, index)], 1, GL_FALSE, glm::value_ptr(mat3));
+}
+
+void Shader::setUniformArrayByIndex(const std::string &name, const glm::mat4 &mat4, size_t index) {
+    glUniformMatrix4fv(m_uniformArrays[std::make_tuple(name, index)], 1, GL_FALSE, glm::value_ptr(mat4));
 }
 
 void Shader::attachShaders(const std::vector<GLuint> &shaders) {
@@ -283,4 +379,3 @@ std::string Shader::getFileContents(std::string path)
     }
     return "";
 }
-

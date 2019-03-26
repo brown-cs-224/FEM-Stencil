@@ -10,9 +10,43 @@
 #include <QTextStream>
 #include <QRegularExpression>
 
-using namespace Eigen;
 
-bool MeshLoader::loadTetMesh(const std::string &filepath, std::vector<Eigen::Vector3f> &vertices, std::vector<Eigen::Vector4i> &tets)
+bool MeshLoader::loadObj(const std::string &filepath, std::vector<glm::vec3> &vertices, std::vector<glm::ivec3> &faces)
+{
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string err;
+    bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err,
+                                filepath.c_str(), nullptr, true);
+    if(!ret) {
+        std::cout << err << std::endl;
+        return false;
+    }
+    for(size_t s = 0; s < shapes.size(); ++s) {
+        size_t indexOffset = 0;
+        for(size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); ++f) {
+            unsigned int fv = shapes[s].mesh.num_face_vertices[f];
+
+            glm::ivec3 face;
+            for(size_t v = 0; v < fv; v++) {
+                tinyobj::index_t idx = shapes[s].mesh.indices[indexOffset + v];
+
+                face[v] = idx.vertex_index;
+            }
+            faces.push_back(face);
+
+            indexOffset += fv;
+        }
+    }
+    for(size_t i = 0; i < attrib.vertices.size(); i += 3) {
+        vertices.emplace_back(attrib.vertices[i], attrib.vertices[i + 1], attrib.vertices[i + 2]);
+    }
+
+    return true;
+}
+
+bool MeshLoader::loadTetMesh(const std::string &filepath, std::vector<glm::vec3> &vertices, std::vector<glm::ivec4> &tets)
 {
     QString qpath = QString::fromStdString(filepath);
     QFile file(qpath);

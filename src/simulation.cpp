@@ -4,7 +4,8 @@
 
 #include "graphics/MeshLoader.h"
 
-using namespace Eigen;
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/transform.hpp"
 
 Simulation::Simulation()
 {
@@ -16,22 +17,22 @@ void Simulation::init()
     //    (note: your working directory must be set to the root directory of the starter code
     //    repo for this file to load correctly). You'll probably want to instead have this code
     //    load up a tet mesh based on e.g. a file path specified with a command line argument.
-    std::vector<Vector3f> vertices;
-    std::vector<Vector4i> tets;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::ivec4> tets;
     if(MeshLoader::loadTetMesh("example-meshes/single-tet.mesh", vertices, tets)) {
         // STUDENTS: This code computes the surface mesh of the loaded tet mesh, i.e. the faces
         //    of tetrahedra which are on the exterior surface of the object. Right now, this is
         //    hard-coded for the single-tet mesh. You'll need to implement surface mesh extraction
         //    for arbitrary tet meshes. Think about how you can identify which tetrahedron faces
         //    are surface faces...
-        std::vector<Vector3i> faces;
+        std::vector<glm::ivec3> faces;
         faces.emplace_back(1, 0, 2);
         faces.emplace_back(2, 0, 3);
         faces.emplace_back(3, 1, 2);
         faces.emplace_back(3, 0, 1);
         m_shape.init(vertices, faces, tets);
     }
-    m_shape.setModelMatrix(Affine3f(Eigen::Translation3f(0, 2, 0)));
+    m_shape.setModelMatrix(glm::translate(glm::vec3(0, 2, 0)));
 
     initGround();
 }
@@ -61,8 +62,8 @@ void Simulation::toggleWire()
 
 void Simulation::initGround()
 {
-    std::vector<Vector3f> groundVerts;
-    std::vector<Vector3i> groundFaces;
+    std::vector<glm::vec3> groundVerts;
+    std::vector<glm::ivec3> groundFaces;
     groundVerts.emplace_back(-5, 0, -5);
     groundVerts.emplace_back(-5, 0, 5);
     groundVerts.emplace_back(5, 0, 5);

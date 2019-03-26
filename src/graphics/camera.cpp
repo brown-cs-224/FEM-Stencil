@@ -1,183 +1,89 @@
 #include "camera.h"
 
-#include <iostream>
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/transform.hpp"
 
-Camera::Camera()
-    : m_pitch(0), m_yaw(0),
-      m_look(0, 0, 1),
-      m_target(0, 0, 0),
-      m_up(0, 1, 0),
-      m_viewDirty(true), m_projDirty(true),
-      m_fovY(90), m_aspect(1), m_near(0.1f), m_far(50.f),
-      m_zoom(1),
-      m_view(Eigen::Matrix4f::Identity()),
-      m_proj(Eigen::Matrix4f::Identity()),
-      m_orbit(false)
-{
+void Camera::rebuildViewMatrix() {
 
+    m_rot = glm::normalize(m_rot);
+    m_viewMatrix = glm::mat4_cast(m_rot) * glm::translate(-m_eye.xyz());
 }
 
-void Camera::setPosition(const Eigen::Vector3f &pos)
-{
-    m_position = pos;
-    m_viewDirty = true;
+void Camera::rebuildProjectionMatrix() {
+    m_projectionMatrix = glm::perspective(glm::radians(m_heightAngle), m_aspectRatio, m_near, m_far) / m_far;
 }
 
-void Camera::move(const Eigen::Vector3f &move)
-{
-    if(move.dot(move) == 0) {
-        return;
-    }
-    m_position += move;
-    m_viewDirty = true;
+
+glm::mat4x4 Camera::getProjectionMatrix() const {
+    return m_projectionMatrix;
 }
 
-void Camera::rotate(float x, float y)
-{
-
-    m_yaw += x;
-    m_pitch += y;
-    m_pitch = m_pitch >= M_PI_2 ? M_PI_2 - 0.01 : m_pitch;
-    m_pitch = m_pitch <= -M_PI_2 ? -M_PI_2 + 0.01 : m_pitch;
-    m_viewDirty = true;
-    updateLook();
+glm::mat4x4 Camera::getViewMatrix() const {
+    return m_viewMatrix;
 }
 
-void Camera::setRotation(float pitch, float yaw)
-{
-    m_pitch = pitch;
-    m_yaw = yaw;
-    m_viewDirty = true;
-    updateLook();
+glm::vec4 Camera::getPosition() const {
+    return m_eye;
 }
 
-void Camera::setPitch(float pitch)
-{
-    m_pitch = pitch;
-    m_viewDirty = true;
-    updateLook();
+glm::vec4 Camera::getLook() const {
+    return glm::normalize(glm::transpose(glm::mat4_cast(m_rot)) * glm::vec4(0, 0, -1, 0));
 }
 
-void Camera::setYaw(float yaw)
-{
-    m_yaw = yaw;
-    m_viewDirty = true;
-    updateLook();
+glm::vec4 Camera::getUp() const {
+    return glm::normalize(glm::transpose(glm::mat4_cast(m_rot)) * glm::vec4(0, 1, 0, 0));
 }
 
-void Camera::lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up)
-{
-    lookInDir(eye, target - eye, up);
+glm::vec4 Camera::getRight() const {
+    return glm::normalize(glm::transpose(glm::mat4_cast(m_rot)) * glm::vec4(1, 0, 0, 0));
 }
 
-void Camera::lookInDir(const Eigen::Vector3f &eye, const Eigen::Vector3f &dir, const Eigen::Vector3f &up)
-{
-    m_position = eye;
-    m_look = dir;
-    m_up = up;
-    m_viewDirty = true;
+float Camera::getAspectRatio() const {
+    return m_aspectRatio;
 }
 
-void Camera::setTarget(const Eigen::Vector3f &target)
-{
-    m_target = target;
-    m_viewDirty = true;
+float Camera::getHeightAngle() const {
+    return m_heightAngle;
 }
 
-void Camera::setPerspective(float fovY, float aspect, float near, float far)
-{
-    m_fovY = fovY;
-    m_aspect = aspect;
-    m_near = near;
-    m_far = far;
-    m_projDirty = true;
+
+void Camera::orientLook(const glm::vec4 &eye, const glm::vec4 &look, const glm::vec4 &up) {
+    m_eye = eye;
+    m_rot = glm::toQuat(glm::transpose(glm::lookAt(glm::vec3(0), look.xyz(), up.xyz())));
+
+    rebuildViewMatrix();
+    rebuildProjectionMatrix();
 }
 
-void Camera::setAspect(float aspect)
-{
-    m_aspect = aspect;
-    m_projDirty = true;
+
+void Camera::setHeightAngle(float h) {
+    m_heightAngle = h;
+    rebuildProjectionMatrix();
 }
 
-void Camera::zoom(float zoom)
-{
-    m_zoom *= zoom;
-    m_viewDirty = true;
+void Camera::setAspectRatio(float a) {
+    m_aspectRatio = a;
+    rebuildProjectionMatrix();
 }
 
-void Camera::setZoom(float zoom)
-{
-    m_zoom = zoom;
-    m_viewDirty = true;
+void Camera::translate(const glm::vec4 &v) {
+    m_eye += v;
+    rebuildViewMatrix();
 }
 
-const Eigen::Matrix4f &Camera::getView()
-{
-    if(m_viewDirty) {
-        Eigen::Vector3f pos;
-        if(m_orbit) {
-            pos = m_target - m_look * m_zoom;
-        } else {
-            pos = m_position;
-        }
-        Eigen::Matrix3f R;
-        Eigen::Vector3f f = m_look.normalized();
-        Eigen::Vector3f u = m_up.normalized();
-        Eigen::Vector3f s = f.cross(u).normalized();
-        u = s.cross(f);
-        R.col(0) = s;
-        R.col(1) = u;
-        R.col(2) = -f;
-        m_view.topLeftCorner<3, 3>() = R.transpose();
-        m_view.topRightCorner<3, 1>() = -R.transpose() * pos;
-        m_view(3, 3) = 1.f;
-        m_viewDirty = false;
-    }
-    return m_view;
+
+void Camera::rotate(float right, float up) {
+    rightAngle += right;
+    upAngle += up;
+
+    m_rot = glm::angleAxis(glm::radians(-upAngle), glm::vec3(1, 0, 0));
+    m_rot *= glm::angleAxis(glm::radians(rightAngle), glm::vec3(0, 1, 0));
+
+    rebuildViewMatrix();
 }
 
-const Eigen::Matrix4f &Camera::getProjection()
-{
-    if(m_projDirty) {
-        float theta = m_fovY * 0.5f;
-        float invRange = 1.f / (m_far - m_near);
-        float invtan = 1.f / tanf(theta);
-        m_proj(0, 0) = invtan / m_aspect;
-        m_proj(1, 1) = invtan;
-        m_proj(2, 2) = -(m_near + m_far) * invRange;
-        m_proj(3, 2) = -1;
-        m_proj(2, 3) = -2 * m_near * m_far * invRange;
-        m_proj(3, 3) = 0;
-        m_projDirty = false;
-    }
-    return m_proj;
-}
-
-const Eigen::Vector3f &Camera::getLook()
-{
-    return m_look;
-}
-
-void Camera::setOrbit(bool orbit)
-{
-    m_orbit = orbit;
-    m_viewDirty = true;
-}
-
-void Camera::toggleOrbit()
-{
-    m_orbit = !m_orbit;
-    m_viewDirty = true;
-}
-
-bool Camera::isOrbit()
-{
-    return m_orbit;
-}
-
-void Camera::updateLook()
-{
-    m_look = Eigen::Vector3f(0, 0, 1);
-    m_look = Eigen::AngleAxis<float>(m_pitch, Eigen::Vector3f::UnitX()) * m_look;
-    m_look = Eigen::AngleAxis<float>(m_yaw, Eigen::Vector3f::UnitY()) * m_look;
+void Camera::setClip(float nearPlane, float farPlane) {
+    m_near = nearPlane;
+    m_far = farPlane;
+    rebuildProjectionMatrix();
 }

@@ -2,15 +2,14 @@
 #define MESHLOADER_H
 
 #include <vector>
-#include <Eigen/Dense>
-#include <Eigen/StdVector>
-
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix4i)
+#include <string>
+#include "glm.hpp"
 
 class MeshLoader
 {
 public:
-    static bool loadTetMesh(const std::string &filepath, std::vector<Eigen::Vector3f> &vertices, std::vector<Eigen::Vector4i> &tets);
+    static bool loadObj(const std::string &filepath, std::vector<glm::vec3> &vertices, std::vector<glm::ivec3> &faces);
+    static bool loadTetMesh(const std::string &filepath, std::vector<glm::vec3> &vertices, std::vector<glm::ivec4> &tets);
 private:
     MeshLoader();
 };

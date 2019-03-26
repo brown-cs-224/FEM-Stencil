@@ -44,15 +44,15 @@ void View::initializeGL()
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
 
-    glClearColor(0.5f, 0.5f, 0.5f, 1);
+    glClearColor(0.1f, 0.1f, 0.1f, 1);
+
 
     m_shader = new Shader(":/shaders/shader.vert", ":/shaders/shader.frag");
     m_sim.init();
 
-    m_camera.setPosition(Eigen::Vector3f(0, 0, 5));
-    m_camera.lookAt(Eigen::Vector3f(0, 2, -5), Eigen::Vector3f(0, 2, 0), Eigen::Vector3f(0, 1, 0));
-    m_camera.setTarget(Eigen::Vector3f(0, 2, 0));
-    m_camera.setPerspective(120, width() / static_cast<float>(height()), 0.1, 50);
+    // Should be setting euler angles all together in orientLook
+    m_camera.orientLook(glm::vec4(0, 2, -7, 1), glm::vec4(0, -1.5f, 5, 0), glm::vec4(0, 1, 0, 0));
+    m_camera.rotate(180, 0);
 
     m_time.start();
     m_timer.start(1000 / 60);
@@ -62,8 +62,8 @@ void View::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_shader->bind();
-    Eigen::Matrix4f model = Eigen::Matrix4f::Identity();
-    Eigen::Matrix4f mvp = m_camera.getProjection() * m_camera.getView();
+    glm::mat4x4 model = glm::mat4x4(1.f);
+    glm::mat4x4 mvp = m_camera.getProjectionMatrix() * m_camera.getViewMatrix();
     m_shader->setUniform("m", model);
     m_shader->setUniform("vp", mvp);
     m_sim.draw(m_shader);
@@ -73,7 +73,7 @@ void View::paintGL()
 void View::resizeGL(int w, int h)
 {
     glViewport(0, 0, w, h);
-    m_camera.setAspect(static_cast<float>(w) / h);
+    m_camera.setAspectRatio(static_cast<float>(w) / h);
 }
 
 void View::mousePressEvent(QMouseEvent *event)
@@ -90,7 +90,7 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
     if(m_capture) {
         if(deltaX != 0 || deltaY != 0) {
-            m_camera.rotate(-deltaX * 0.01f, deltaY * 0.01f);
+            m_camera.rotate(deltaX, -deltaY);
         }
     }
     m_lastX = event->x();
@@ -102,10 +102,9 @@ void View::mouseReleaseEvent(QMouseEvent *)
     m_capture = false;
 }
 
-void View::wheelEvent(QWheelEvent *event)
+void View::wheelEvent(QWheelEvent *)
 {
-    float zoom = 1 - event->delta() * 0.1f / 120;
-    m_camera.zoom(zoom);
+
 }
 
 void View::keyPressEvent(QKeyEvent *event)
@@ -119,29 +118,7 @@ void View::keyPressEvent(QKeyEvent *event)
     // Feel free to remove this
     if (event->key() == Qt::Key_Escape) QApplication::quit();
 
-    if(event->key() == Qt::Key_C) {
-        m_camera.toggleOrbit();
-    }
-    else if(event->key() == Qt::Key_W) {
-        m_forward += 1;
-    }
-    else if(event->key() == Qt::Key_S) {
-        m_forward -= 1;
-    }
-    else if(event->key() == Qt::Key_A) {
-        m_sideways -= 1;
-    }
-    else if(event->key() == Qt::Key_D) {
-        m_sideways += 1;
-    }
-    else if(event->key() == Qt::Key_Q) {
-        m_vertical -= 1;
-    }
-    else if(event->key() == Qt::Key_E) {
-        m_vertical += 1;
-    } else if(event->key() == Qt::Key_T) {
-        m_sim.toggleWire();
-    }
+    m_keys[event->key()] = true;
 }
 
 void View::keyRepeatEvent(QKeyEvent *)
@@ -155,24 +132,7 @@ void View::keyReleaseEvent(QKeyEvent *event)
         return;
     }
 
-    if(event->key() == Qt::Key_W) {
-        m_forward -= 1;
-    }
-    else if(event->key() == Qt::Key_S) {
-        m_forward += 1;
-    }
-    else if(event->key() == Qt::Key_A) {
-        m_sideways += 1;
-    }
-    else if(event->key() == Qt::Key_D) {
-        m_sideways -= 1;
-    }
-    else if(event->key() == Qt::Key_Q) {
-        m_vertical += 1;
-    }
-    else if(event->key() == Qt::Key_E) {
-        m_vertical -= 1;
-    }
+    m_keys[event->key()] = false;
 }
 
 void View::tick()
@@ -180,13 +140,29 @@ void View::tick()
     float seconds = m_time.restart() * 0.001f;
     m_sim.update(seconds);
 
-    auto look = m_camera.getLook();
-    look.y() = 0;
-    look.normalize();
-    Eigen::Vector3f perp(-look.z(), 0, look.x());
-    Eigen::Vector3f moveVec = m_forward * look + m_sideways * perp + m_vertical * Eigen::Vector3f::UnitY();
-    moveVec *= seconds;
-    m_camera.move(moveVec);
+    float moveSpeed = 0.1f;
+
+    if(m_keys[Qt::Key_W]) {
+        m_camera.translate(m_camera.getLook() * moveSpeed);
+    }
+    if(m_keys[Qt::Key_S]) {
+        m_camera.translate(-m_camera.getLook() * moveSpeed);
+    }
+
+    if(m_keys[Qt::Key_A]) {
+        m_camera.translate(-m_camera.getRight() * moveSpeed);
+    }
+    if(m_keys[Qt::Key_D]) {
+        m_camera.translate(m_camera.getRight() * moveSpeed);
+    }
+
+    if(m_keys[Qt::Key_Q]) {
+        m_camera.translate(-m_camera.getUp() * moveSpeed);
+    }
+    if(m_keys[Qt::Key_E]) {
+        m_camera.translate(m_camera.getUp() * moveSpeed);
+    }
+
     // Flag this view for repainting (Qt will call paintGL() soon after)
     update();
 }

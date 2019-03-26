@@ -1,58 +1,58 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef QUATERNIONCAMERA_H
+#define QUATERNIONCAMERA_H
 
-#include <Eigen/Dense>
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_SWIZZLE
 
-class Camera
-{
-public:
-    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
-    Camera();
+#include <glm.hpp>
+#include <gtc/quaternion.hpp>
+#include <gtx/quaternion.hpp>
 
-    void setPosition(const Eigen::Vector3f &pos);
-    void move(const Eigen::Vector3f &move);
-
-    void rotate(float x, float y);
-    void setRotation(float pitch, float yaw);
-    void setPitch(float pitch);
-    void setYaw(float yaw);
-
-    void lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up);
-    void lookInDir(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up);
-    void setTarget(const Eigen::Vector3f &target);
-    void setPerspective(float fovY, float aspect, float near, float far);
-    void setAspect(float aspect);
-
-    void zoom(float zoom);
-    void setZoom(float zoom);
-
-    const Eigen::Matrix4f& getView();
-    const Eigen::Matrix4f& getProjection();
-
-    const Eigen::Vector3f &getLook();
-
-    void setOrbit(bool orbit);
-    void toggleOrbit();
-    bool isOrbit();
-
+class Camera {
 private:
-    void updateLook();
+    void rebuildViewMatrix();
+    void rebuildProjectionMatrix();
 
-    float m_pitch, m_yaw;
+    glm::mat4x4 m_viewMatrix;
+    glm::mat4x4 m_projectionMatrix;
 
-    Eigen::Vector3f m_position;
-    Eigen::Vector3f m_look;
-    Eigen::Vector3f m_target;
-    Eigen::Vector3f m_up;
+    glm::vec4 m_eye;
+    glm::quat m_rot;
 
-    bool m_viewDirty, m_projDirty;
+    float m_heightAngle;
+    float m_aspectRatio;
+    float m_near;
+    float m_far;
+    float rightAngle, upAngle;
 
-    float m_fovY, m_aspect, m_near, m_far;
-    float m_zoom;
+public:
+    Camera() : m_heightAngle(60), m_aspectRatio(1), m_near(1), m_far(30), rightAngle(0), upAngle(0) {
+        orientLook(glm::vec4(0.f, 0.f, 2.f, 0.f),
+                   glm::vec4(0.f, 0.f, -1.f, 0.f),
+                   glm::vec4(0.f, 1.f, 0.f, 0.f));
+    }
+    ~Camera() {}
 
-    Eigen::Matrix4f m_view, m_proj;
+    glm::mat4x4 getViewMatrix() const;
+    glm::mat4x4 getProjectionMatrix() const;
 
-    bool m_orbit;
+    glm::vec4 getPosition() const;
+    glm::vec4 getLook() const;
+    glm::vec4 getUp() const;
+    glm::vec4 getRight() const;
+    float getAspectRatio() const;
+    float getHeightAngle() const;
+
+    void orientLook(const glm::vec4 &eye, const glm::vec4 &look, const glm::vec4 &up);
+
+    void setHeightAngle(float h);
+    void setAspectRatio(float a);
+    void translate(const glm::vec4 &v);
+    void rotate(float right, float up);
+    void rotateU(float degrees);
+    void rotateV(float degrees);
+    void rotateW(float degrees);
+    void setClip(float nearPlane, float farPlane);
 };
 
-#endif // CAMERA_H
+#endif // QUATERNIONCAMERA_H

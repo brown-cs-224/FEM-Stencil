@@ -9,13 +9,8 @@
 #include <QTime>
 #include <QTimer>
 #include <memory>
+#include <unordered_map>
 
-/**
- * This is similar to your "CS1971FrontEnd" class. Here you will receive all of the input events
- * to forward to your game.
- *
- * @brief The View class
- */
 class View : public QGLWidget
 {
     Q_OBJECT
@@ -48,6 +43,8 @@ private:
     Simulation m_sim;
     Camera m_camera;
     Shader *m_shader;
+
+    std::unordered_map<int, bool> m_keys;
 
     int m_forward, m_sideways, m_vertical;
 
