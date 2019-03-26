@@ -117,6 +117,7 @@ void View::keyPressEvent(QKeyEvent *event)
 
     // Feel free to remove this
     if (event->key() == Qt::Key_Escape) QApplication::quit();
+    else if(event->key() == Qt::Key_T) m_sim.toggleWire();
 
     m_keys[event->key()] = true;
 }

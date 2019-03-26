@@ -11,7 +11,6 @@ You also might want to look at `src/view.cpp`, if you're interested in adding ne
 Speaking of controls: the controls offered by the starter code are:
  * Move Camera: WASD
  * Look around: Click and hold mouse and drag
- * Toggle orbit mode: C (changes the camera from a first-person view to an orbiting camera a la what the Maya editor does)
  * Toggle between displaying the surface mesh and a wireframe of the full tet mesh: T
 
 When the program first loads, you should see a ground plane and a single tet floating in space, against a gray background.
