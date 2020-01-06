@@ -53,7 +53,6 @@ private:
     Eigen::Matrix4f m_modelMatrix;
 
     bool m_wireframe;
-
 };
 
 #endif // SHAPE_H
