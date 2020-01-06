@@ -43,11 +43,17 @@ private:
     unsigned int m_numSurfaceVertices;
     unsigned int m_numTetVertices;
     unsigned int m_verticesSize;
+    float m_red;
+    float m_blue;
+    float m_green;
+    float m_alpha;
+
     std::vector<Eigen::Vector3i> m_faces;
 
     Eigen::Matrix4f m_modelMatrix;
 
     bool m_wireframe;
+
 };
 
 #endif // SHAPE_H
