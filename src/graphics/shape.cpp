@@ -13,6 +13,7 @@ Shape::Shape()
       m_modelMatrix(Eigen::Matrix4f::Identity()),
       m_wireframe(false)
 {
+
 }
 
 void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles)
@@ -102,6 +103,11 @@ void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector
     m_numSurfaceVertices = faces.size() * 3;
     m_verticesSize = vertices.size();
     m_faces = triangles;
+
+    m_red = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    m_blue = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    m_green = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+    m_alpha = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
 }
 
 void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices)
@@ -206,12 +212,20 @@ void Shape::draw(Shader *shader)
     if(m_wireframe && m_tetVao != -1) {
         shader->setUniform("wire", 1);
         shader->setUniform("m", m_modelMatrix);
+        shader->setUniform("red", 1);
+        shader->setUniform("green", 1);
+        shader->setUniform("blue", 1);
+        shader->setUniform("alpha", 1);
         glBindVertexArray(m_tetVao);
         glDrawElements(GL_LINES, m_numTetVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
         glBindVertexArray(0);
     } else {
         shader->setUniform("wire", 0);
         shader->setUniform("m", m_modelMatrix);
+        shader->setUniform("red", m_red);
+        shader->setUniform("green", m_green);
+        shader->setUniform("blue", m_blue);
+        shader->setUniform("alpha", m_alpha);
         glBindVertexArray(m_surfaceVao);
         glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
         glBindVertexArray(0);
