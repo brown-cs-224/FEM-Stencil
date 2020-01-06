@@ -43,8 +43,9 @@ void View::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
-    glClearColor(0.5f, 0.5f, 0.5f, 1);
+    
+    // alice blue
+    glClearColor(240.0f/255.0f, 248.0f/255.0f, 255.0f/255.0f, 1);
 
     m_shader = new Shader(":/shaders/shader.vert", ":/shaders/shader.frag");
     m_sim.init();
