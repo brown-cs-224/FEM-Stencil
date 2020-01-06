@@ -13,7 +13,6 @@ Shape::Shape()
       m_modelMatrix(Eigen::Matrix4f::Identity()),
       m_wireframe(false)
 {
-
 }
 
 void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles)
