@@ -13,7 +13,7 @@ uniform float alpha = 1.0;
 
 void main() {
     if(wire == 1) {
-        fragColor = vec4(1, 1, 1, 1);
+        fragColor = vec4(0.0, 0.0, 0.0, 1);
         return;
     }
     vec4 lightPos = vec4(-2.0, 2.0, -3.0 , 1.0);
