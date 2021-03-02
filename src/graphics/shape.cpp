@@ -173,7 +173,7 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices)
     glBindBuffer(GL_ARRAY_BUFFER, m_surfaceVbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * verts.size() * 3, static_cast<const void *>(verts.data()));
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(float) * verts.size() * 3, sizeof(float) * verts.size() * 3, static_cast<const void *>(normals.data()));
-    if(m_tetVao != -1) {
+    if(m_tetVao != static_cast<GLuint>(-1)) {
         glBindBuffer(GL_ARRAY_BUFFER, m_tetVbo);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * vertices.size() * 3, static_cast<const void *>(verts.data()));
     }
@@ -208,7 +208,7 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std:
 
 void Shape::draw(Shader *shader)
 {
-    if(m_wireframe && m_tetVao != -1) {
+    if(m_wireframe && m_tetVao != static_cast<GLuint>(-1)) {
         shader->setUniform("wire", 1);
         shader->setUniform("m", m_modelMatrix);
         shader->setUniform("red", 1);

@@ -6,7 +6,7 @@
 #include "graphics/Shader.h"
 
 #include <QGLWidget>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QTimer>
 #include <memory>
 
@@ -42,7 +42,7 @@ private:
 
 private:
     QWidget *m_window;
-    QTime m_time;
+    QElapsedTimer m_time;
     QTimer m_timer;
 
     Simulation m_sim;
