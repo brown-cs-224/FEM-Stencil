@@ -28,7 +28,6 @@ SOURCES += \
     src/graphics/MeshLoader.cpp
 
 HEADERS += \
-    libs/glew-1.10.0/include/GL/glew.h \
     src/mainwindow.h \
     src/view.h \
     src/viewformat.h \
@@ -38,8 +37,6 @@ HEADERS += \
     src/simulation.h \
     src/graphics/shape.h \
     src/graphics/camera.h \
-    libs/tiny_obj/tiny_obj_loader.h \
-    libs/unsupported/Eigen/OpenGLSupport \
     ui_mainwindow.h \
     src/graphics/MeshLoader.h
 
