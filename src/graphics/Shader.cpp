@@ -140,7 +140,7 @@ void Shader::detachShaders(const std::vector<GLuint> &shaders) {
 }
 
 void Shader::deleteShaders(const std::vector<GLuint> &shaders) {
-    std::for_each(shaders.begin(), shaders.end(), [this](int s){ glDeleteShader(s); });
+    std::for_each(shaders.begin(), shaders.end(), [](int s){ glDeleteShader(s); });
 }
 
 void Shader::linkShaderProgram() {
