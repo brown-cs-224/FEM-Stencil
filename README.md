@@ -153,6 +153,7 @@ These output their own various file formats (as there is, alas, less standardiza
 - Use `const` and `assert` wherever possible.
 - Check for uninitialized values.
 - Use Qt Creator's debugger.
+- **For numeric values that your simulation keeps track of (positions, velocities, forces, etc.), use** `double` **and** `Eigen::Vector3d` **instead of** `float` **and** `Eigen::Vector3f`**. The additional precision can have a big impact on your simulation's stability.**
 - **REMINDER: Your code will run much faster if you compile in Release mode ;)**
 
 ### Submission Instructions
