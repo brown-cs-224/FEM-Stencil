@@ -78,7 +78,7 @@ Each of the following features that you implement will earn you extra points. Th
   * [Verlet integration](https://resources.saylor.org/wwwresources/archived/site/wp-content/uploads/2011/06/MA221-6.1.pdf)
 * Adaptive time stepping **(5 points)**
   * Take the largest time step you can take while remaining within some error threshold.
-  * [Baraff and Witkin’s](https://www.cs.cmu.edu/~baraff/sigcourse/) notes are helpful here.
+  * [Baraff and Witkin’s](https://www.cs.cmu.edu/~baraff/sigcourse/notesb.pdf) notes are helpful here.
 * Parallelize your code **(5 points)**
   * Many simulator operations are ‘embarrassingly parallel’ (force computations, integrator steps, etc.)
   * Even something as simple as [OpenMP’s parallel for loop](http://supercomputingblog.com/openmp/tutorial-parallel-for-loops-with-openmp/) can buy you significant speedups, if applied in the right places.
