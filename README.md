@@ -36,7 +36,8 @@ Your simulator must implement at least the following features:
 * Compute and apply internal viscous damping forces **(10 points)**
 * Resolve collisions **(10 points)**
   * You must implement collision between the mesh and a ground plane, as well as at least one other type of obstacle (e.g. spheres).
-  * The simple ‘penalty force’ method described in Section 3.3 of [O’Brien and Hodgins](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) is sufficient.
+  * The simple ‘penalty force’ method described in Section 3.3 of [O’Brien and Hodgins](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) can work, but it's not terribly stable.
+  * A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a *normal component* (i.e. parallel to surface normal of the collider at the point of intersection and a *tangential component* (perpendicular to the collider normal), (3) Set the normal component of the velocity to zero, (4) Scale the tangential component of the velocity by some friction constant < 1. 
 * Integrate your simulation forward in time using the explicit [midpoint method](https://www.pixar.com/assets/pbm2001/pdf/notesb.pdf) **(10 points)** (regular Euler integration recommended to start with)
 * Video (described below) **(10 points)**
 * README **(5 points)**
