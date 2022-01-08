@@ -181,6 +181,17 @@ If the tet does not display: check the console output. Most likely the .mesh fil
 
 ## Example Video
 
+
+- For the following example these parameters are used:
+    - Eigen::Vector3d \_g = Eigen::Vector3d(0.0, -1.0, 0.0); // gravity
+    - double \_kFloor = 4e4; //penalty for node collision
+    - double \_lambda = 4e3; //incompressibility for the whole material
+    - double \_mu = 4e3; //rigidity for the whole material
+    - double \_phi = 100; //coefficients of viscosity
+    - double \_psi = 100; 
+    - double \_density = 1200.0; //density
+    - timestep = 0.0003f; 
+
 Single tetrahedral falling on the floor.
 
 ![Alt Text](example-video/tet.gif)
