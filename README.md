@@ -188,7 +188,7 @@ If the tet does not display: check the console output. Most likely the .mesh fil
     - double \_density = 1200.0; //density
     - timestep = 0.0003f; 
 
-Single tetrahedral falling on the floor.
+Single tetrahedron falling on the floor.
 
 ![Alt Text](example-video/tet.gif)
 
