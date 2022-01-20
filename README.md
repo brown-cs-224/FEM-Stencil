@@ -57,7 +57,7 @@ To turn a set of frame images into a video, you can use [FFMPEG](https://hamelot
 
 ### README
 
-You must also submit a plaintext README file. This file should describe how to run your simulator (e.g. what command line arguments are needed?)
+You must also submit a Markdown README file. This file should describe how to run your simulator (e.g. what command line arguments are needed?)
 
 This file should also list all of the features your simulator implements.
 
