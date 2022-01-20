@@ -61,7 +61,7 @@ You must also submit a Markdown README file. This file should describe how to ru
 
 This file should also list all of the features your simulator implements.
 
-Finally, it should describe what features are demonstrated by the video(s) you’ve submitted.
+Finally, it should describe what features are demonstrated by the video(s) you’ve submitted. You should embed the videos into the README file.
 
 ### Extra Features
 Each of the following features that you implement will earn you extra points. The features are ordered roughly by difficulty of implementation.
