@@ -1,4 +1,4 @@
-# Assignment 3: Finite Element Simulation (fem)
+# Assignment 3: Finite Element Simulation (FEM)
 
 **Released:** 3/9/22
 
