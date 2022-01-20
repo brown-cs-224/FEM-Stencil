@@ -157,7 +157,7 @@ These output their own various file formats (as there is, alas, less standardiza
 
 Submit your branch of the Github classroom repository to the “Simulation” assignment.
 
-## Simulation-Stencil
+## About the code
 
 This starter code provides a simple 3D viewer for tetrahedral mesh simulations.
 As given, it will load up and visualize a single tetrahedron.
