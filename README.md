@@ -129,6 +129,7 @@ These files are in the .mesh format, a line-by-line file format that resembles t
 
 If you want to create new tetrahedral meshes, you can do so using one of the following software packages:
 
+* [fTetWild](https://github.com/wildmeshing/fTetWild)
 * [Netgen](https://sourceforge.net/projects/netgen-mesher/)
 * [Tetgen](http://wias-berlin.de/software/index.jsp?id=TetGen&lang=1)
 * [Quartet](https://github.com/crawforddoran/quartet)
