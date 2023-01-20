@@ -5,7 +5,7 @@
 #include "graphics/camera.h"
 #include "graphics/Shader.h"
 
-#include <QGLWidget>
+#include <QOpenGLWidget>
 #include <QElapsedTimer>
 #include <QTimer>
 #include <memory>
@@ -16,7 +16,7 @@
  *
  * @brief The View class
  */
-class View : public QGLWidget
+class View : public QOpenGLWidget
 {
     Q_OBJECT
 

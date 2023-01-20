@@ -22,8 +22,6 @@ find_package(Qt6 REQUIRED COMPONENTS OpenGL)
 find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-add_subdirectory(eigen)
-
 # Allows you to include files from within those directories, without prefixing their filepaths
 include_directories(src)
 include_directories(libs)
@@ -69,6 +67,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Widgets
     Qt::Xml
     StaticGLEW
+)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    eigen
 )
 
 # Specifies other files

@@ -1,7 +1,5 @@
 #include "view.h"
 
-#include "viewformat.h"
-
 #include <QApplication>
 #include <QKeyEvent>
 
@@ -9,7 +7,7 @@
 
 using namespace std;
 
-View::View(QWidget *parent) : QGLWidget(ViewFormat(), parent),
+View::View(QWidget *parent) : QOpenGLWidget(parent),
     m_window(parent->parentWidget()),
     m_time(), m_timer(),
     m_forward(), m_sideways(), m_vertical(),
@@ -105,7 +103,7 @@ void View::mouseReleaseEvent(QMouseEvent *)
 
 void View::wheelEvent(QWheelEvent *event)
 {
-    float zoom = 1 - event->delta() * 0.1f / 120;
+    float zoom = 1 - event->pixelDelta().x() * 0.1f / 120;
     m_camera.zoom(zoom);
 }
 
