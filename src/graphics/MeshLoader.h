@@ -2,8 +2,8 @@
 #define MESHLOADER_H
 
 #include <vector>
-#include <Eigen/Dense>
-#include <Eigen/StdVector>
+#include <eigen/Eigen/Dense>
+#include <eigen/Eigen/StdVector>
 
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix4i)
 

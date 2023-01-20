@@ -6,11 +6,11 @@
 
 #define EIGEN_DONT_VECTORIZE
 #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-#include <Eigen/StdVector>
+#include <eigen/Eigen/StdVector>
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix2f)
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3f)
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3i)
-#include <Eigen/Dense>
+#include <eigen/Eigen/Dense>
 
 class Shader;
 

@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <Eigen/Dense>
+#include <eigen/Eigen/Dense>
 
 class Camera
 {
