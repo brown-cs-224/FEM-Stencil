@@ -69,8 +69,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     StaticGLEW
 )
 
+# This allows you to `#include "Eigen/..."`
 target_include_directories(${PROJECT_NAME} PRIVATE
-    eigen
+    Eigen
 )
 
 # Specifies other files
