@@ -16,7 +16,7 @@ public:
     void setPitch(float pitch);
     void setYaw(float yaw);
 
-    void lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up);
+    void lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target);
     void setTarget(const Eigen::Vector3f &target);
     void setPerspective(float fovY, float aspect, float near, float far);
     void setAspect(float aspect);
@@ -29,9 +29,9 @@ public:
 
     const Eigen::Vector3f &getLook();
 
-    void setOrbit(bool orbit);
-    void toggleOrbit();
-    bool isOrbit();
+    void setIsOrbiting(bool orbit);
+    void toggleIsOrbiting();
+    bool getIsOrbiting();
 
 private:
     void updateLook();
@@ -41,7 +41,7 @@ private:
     Eigen::Vector3f m_position;
     Eigen::Vector3f m_look;
     Eigen::Vector3f m_target;
-    Eigen::Vector3f m_up;
+    Eigen::Vector3f m_unused; // <--- look here
 
     bool m_viewDirty, m_projDirty;
 
@@ -50,5 +50,5 @@ private:
 
     Eigen::Matrix4f m_view, m_proj;
 
-    bool m_orbit;
+    bool m_isOrbiting;
 };

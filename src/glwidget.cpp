@@ -66,9 +66,7 @@ void GLWidget::initializeGL()
     // Initialize camera with a reasonable transform
     Eigen::Vector3f eye    = {0, 2, -5};
     Eigen::Vector3f target = {0, 1,  0};
-    Eigen::Vector3f up     = {0, 1,  0};
-    m_camera.setPosition({0, 0, 5});
-    m_camera.lookAt(eye, target, up);
+    m_camera.lookAt(eye, target);
     m_camera.setTarget(target);
     m_camera.setPerspective(120, width() / static_cast<float>(height()), 0.1, 50);
 
@@ -147,7 +145,7 @@ void GLWidget::keyPressEvent(QKeyEvent *event)
     case Qt::Key_D: m_sideways += SPEED; break;
     case Qt::Key_F: m_vertical -= SPEED; break;
     case Qt::Key_R: m_vertical += SPEED; break;
-    case Qt::Key_C: m_camera.toggleOrbit(); break;
+    case Qt::Key_C: m_camera.toggleIsOrbiting(); break;
     case Qt::Key_T: m_sim.toggleWire(); break;
     case Qt::Key_Escape: QApplication::quit();
     }

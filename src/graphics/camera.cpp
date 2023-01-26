@@ -7,7 +7,6 @@ Camera::Camera()
       m_yaw(0),
       m_look(0, 0, 1),
       m_target(0, 0, 0),
-      m_up(0, 1, 0),
       m_viewDirty(true),
       m_projDirty(true),
       m_fovY(90),
@@ -17,7 +16,7 @@ Camera::Camera()
       m_zoom(1),
       m_view(Eigen::Matrix4f::Identity()),
       m_proj(Eigen::Matrix4f::Identity()),
-      m_orbit(false)
+      m_isOrbiting(false)
 {}
 
 void Camera::setPosition(const Eigen::Vector3f &pos)
@@ -66,11 +65,10 @@ void Camera::setYaw(float yaw)
     updateLook();
 }
 
-void Camera::lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up)
+void Camera::lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target)
 {
     m_position = eye;
     m_look = target - eye;
-    m_up = up;
     m_viewDirty = true;
 }
 
@@ -111,14 +109,14 @@ const Eigen::Matrix4f &Camera::getView()
 {
     if (m_viewDirty) {
         Eigen::Vector3f pos;
-        if (m_orbit) {
+        if (m_isOrbiting) {
             pos = m_target - m_look * m_zoom;
         } else {
             pos = m_position;
         }
         Eigen::Matrix3f R;
         Eigen::Vector3f f = m_look.normalized();
-        Eigen::Vector3f u = m_up.normalized();
+        Eigen::Vector3f u = Eigen::Vector3f::UnitY();
         Eigen::Vector3f s = f.cross(u).normalized();
         u = s.cross(f);
         R.col(0) = s;
@@ -154,22 +152,23 @@ const Eigen::Vector3f &Camera::getLook()
     return m_look;
 }
 
-void Camera::setOrbit(bool orbit)
+bool Camera::getIsOrbiting()
 {
-    m_orbit = orbit;
+    return m_isOrbiting;
+}
+
+void Camera::setIsOrbiting(bool isOrbiting)
+{
+    m_isOrbiting = isOrbiting;
     m_viewDirty = true;
 }
 
-void Camera::toggleOrbit()
+void Camera::toggleIsOrbiting()
 {
-    m_orbit = !m_orbit;
+    m_isOrbiting = !m_isOrbiting;
     m_viewDirty = true;
 }
 
-bool Camera::isOrbit()
-{
-    return m_orbit;
-}
 
 void Camera::updateLook()
 {
