@@ -1,7 +1,6 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
-#include <eigen/Eigen/Dense>
+#include "Eigen/Dense"
 
 class Camera
 {
@@ -18,7 +17,6 @@ public:
     void setYaw(float yaw);
 
     void lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up);
-    void lookInDir(const Eigen::Vector3f &eye, const Eigen::Vector3f &target, const Eigen::Vector3f &up);
     void setTarget(const Eigen::Vector3f &target);
     void setPerspective(float fovY, float aspect, float near, float far);
     void setAspect(float aspect);
@@ -54,5 +52,3 @@ private:
 
     bool m_orbit;
 };
-
-#endif // CAMERA_H

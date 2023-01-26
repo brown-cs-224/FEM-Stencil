@@ -1,16 +1,17 @@
-#ifndef SHAPE_H
-#define SHAPE_H
+#pragma once
 
 #include <GL/glew.h>
 #include <vector>
 
 #define EIGEN_DONT_VECTORIZE
 #define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-#include <eigen/Eigen/StdVector>
+
+#include "Eigen/StdVector"
+#include "Eigen/Dense"
+
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix2f)
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3f)
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3i)
-#include <eigen/Eigen/Dense>
 
 class Shader;
 
@@ -54,5 +55,3 @@ private:
 
     bool m_wireframe;
 };
-
-#endif // SHAPE_H

@@ -1,9 +1,9 @@
+#include <GL/glew.h>
 #include "GraphicsDebug.h"
 
 #include <iostream>
 #include <vector>
 
-#include <GL/glew.h>
 
 void checkError(std::string prefix) {
     GLenum err = glGetError();

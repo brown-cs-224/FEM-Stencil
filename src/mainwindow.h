@@ -1,28 +1,17 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
+#include "glwidget.h"
 
-namespace Ui {
-    class MainWindow;
-}
-
-/**
- * QTs "frame" class, opens a window for you to draw in and interact with.
- *
- * @brief The MainWindow class
- */
-class MainWindow : public QMainWindow
+class MainWindow : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    MainWindow();
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+
+    GLWidget *glWidget;
 };
-
-#endif // MAINWINDOW_H
-

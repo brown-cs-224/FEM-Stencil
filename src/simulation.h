@@ -1,5 +1,4 @@
-#ifndef SIMULATION_H
-#define SIMULATION_H
+#pragma once
 
 #include "graphics/shape.h"
 
@@ -23,5 +22,3 @@ private:
     Shape m_ground;
     void initGround();
 };
-
-#endif // SIMULATION_H

@@ -6,9 +6,7 @@
 
 using namespace Eigen;
 
-Simulation::Simulation()
-{
-}
+Simulation::Simulation() {}
 
 void Simulation::init()
 {
@@ -18,7 +16,7 @@ void Simulation::init()
     //    load up a tet mesh based on e.g. a file path specified with a command line argument.
     std::vector<Vector3f> vertices;
     std::vector<Vector4i> tets;
-    if(MeshLoader::loadTetMesh("example-meshes/single-tet.mesh", vertices, tets)) {
+    if (MeshLoader::loadTetMesh(":/example-meshes/single-tet.mesh", vertices, tets)) {
         // STUDENTS: This code computes the surface mesh of the loaded tet mesh, i.e. the faces
         //    of tetrahedra which are on the exterior surface of the object. Right now, this is
         //    hard-coded for the single-tet mesh. You'll need to implement surface mesh extraction
@@ -50,8 +48,8 @@ void Simulation::update(float seconds)
 
 void Simulation::draw(Shader *shader)
 {
-//    m_shape.draw(shader);
-//    m_ground.draw(shader);
+    m_shape.draw(shader);
+    m_ground.draw(shader);
 }
 
 void Simulation::toggleWire()

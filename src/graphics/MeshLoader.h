@@ -1,9 +1,8 @@
-#ifndef MESHLOADER_H
-#define MESHLOADER_H
+#pragma once
 
 #include <vector>
-#include <eigen/Eigen/Dense>
-#include <eigen/Eigen/StdVector>
+#include "Eigen/Dense"
+#include "Eigen/StdVector"
 
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix4i)
 
@@ -14,5 +13,3 @@ public:
 private:
     MeshLoader();
 };
-
-#endif // MESHLOADER_H

@@ -5,6 +5,7 @@
 #include "graphics/Shader.h"
 
 using namespace Eigen;
+using namespace std;
 
 Shape::Shape()
     : m_tetVao(-1),
@@ -17,7 +18,7 @@ Shape::Shape()
 
 void Shape::init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles)
 {
-    if(vertices.size() != normals.size()) {
+    if (vertices.size() != normals.size()) {
         std::cerr << "Vertices and normals are not the same size" << std::endl;
         return;
     }
@@ -208,22 +209,22 @@ void Shape::setVertices(const std::vector<Eigen::Vector3f> &vertices, const std:
 
 void Shape::draw(Shader *shader)
 {
-    if(m_wireframe && m_tetVao != static_cast<GLuint>(-1)) {
-        shader->setUniform("wire", 1);
-        shader->setUniform("m", m_modelMatrix);
-        shader->setUniform("red", 1);
+    if (m_wireframe && m_tetVao != static_cast<GLuint>(-1)) {
+        shader->setUniform("wire",  1);
+        shader->setUniform("m",     m_modelMatrix);
+        shader->setUniform("red",   1);
         shader->setUniform("green", 1);
-        shader->setUniform("blue", 1);
+        shader->setUniform("blue",  1);
         shader->setUniform("alpha", 1);
         glBindVertexArray(m_tetVao);
         glDrawElements(GL_LINES, m_numTetVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
         glBindVertexArray(0);
     } else {
-        shader->setUniform("wire", 0);
-        shader->setUniform("m", m_modelMatrix);
-        shader->setUniform("red", m_red);
+        shader->setUniform("wire",  0);
+        shader->setUniform("m",     m_modelMatrix);
+        shader->setUniform("red",   m_red);
         shader->setUniform("green", m_green);
-        shader->setUniform("blue", m_blue);
+        shader->setUniform("blue",  m_blue);
         shader->setUniform("alpha", m_alpha);
         glBindVertexArray(m_surfaceVao);
         glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));

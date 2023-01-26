@@ -1,30 +1,21 @@
 #include "Shader.h"
+#include "GraphicsDebug.h"
 
 #include <QFile>
 #include <QString>
 #include <QTextStream>
-#include <algorithm>
 #include <iostream>
-#include <utility>
 
-#include "GraphicsDebug.h"
-
-Shader::Shader(const std::string &vertexPath, const std::string &fragmentPath)
+Shader::Shader(const std::string &vertexPath,
+               const std::string &fragmentPath)
 {
     createProgramID();
-    std::vector<GLuint> shaders;
-    shaders.push_back(createVertexShaderFromSource(getFileContents(vertexPath)));
-    shaders.push_back(createFragmentShaderFromSource(getFileContents(fragmentPath)));
-    buildShaderProgramFromShaders(shaders);
-    discoverShaderData();
-}
 
-Shader::Shader(const std::string &vertexPath, const std::string &geometryPath, const std::string &fragmentPath) {
-    createProgramID();
-    std::vector<GLuint> shaders;
-    shaders.push_back(createVertexShaderFromSource(getFileContents(vertexPath)));
-    shaders.push_back(createGeometryShaderFromSource(getFileContents(geometryPath)));
-    shaders.push_back(createFragmentShaderFromSource(getFileContents(fragmentPath)));
+    std::vector<GLuint> shaders = {
+        createShaderFromString(getFileContents(vertexPath),   GL_VERTEX_SHADER),
+        createShaderFromString(getFileContents(fragmentPath), GL_FRAGMENT_SHADER)
+    };
+
     buildShaderProgramFromShaders(shaders);
     discoverShaderData();
 }
@@ -34,15 +25,16 @@ Shader::~Shader()
     glDeleteProgram(m_programID);
 }
 
-Shader::Shader(Shader &&that) :
-    m_programID(that.m_programID),
-    m_attributes(std::move(that.m_attributes)),
-    m_uniforms(std::move(that.m_uniforms))
+Shader::Shader(Shader &&that)
+    : m_programID(that.m_programID),
+      m_attributes(std::move(that.m_attributes)),
+      m_uniforms(std::move(that.m_uniforms))
 {
     that.m_programID = 0;
 }
 
-Shader& Shader::operator=(Shader &&that) {
+Shader& Shader::operator=(Shader &&that)
+{
     this->~Shader();
 
     m_programID = that.m_programID;
@@ -54,99 +46,100 @@ Shader& Shader::operator=(Shader &&that) {
     return *this;
 }
 
-void Shader::bind() const {
-    glUseProgram(m_programID);
-}
+// ================== Regular Use
 
-void Shader::unbind() const {
-    glUseProgram(0);
-}
+void Shader::bind()   const { glUseProgram(m_programID); }
 
-GLuint Shader::getUniformLocation(std::string name) {
+void Shader::unbind() const { glUseProgram(0); }
+
+GLuint Shader::getUniformLocation(std::string name)
+{
     return glGetUniformLocation(m_programID, name.c_str());
 }
 
-GLuint Shader::getEnumeratedUniformLocation(std::string name, int index) {
+GLuint Shader::getEnumeratedUniformLocation(std::string name, int index)
+{
     std::string n = name + "[" + std::to_string(index) + "]";
     return glGetUniformLocation(m_programID, n.c_str());
 }
 
-void Shader::setUniform(const std::string &name, float f) {
+// ================== Setting Uniforms
+
+// Note: the overload to set matrix uniforms is in the .h file
+
+void Shader::setUniform(const std::string &name, float f)
+{
     glUniform1f(m_uniforms[name], f);
 }
 
-void Shader::setUniform(const std::string &name, int i) {
+void Shader::setUniform(const std::string &name, int i)
+{
     glUniform1i(m_uniforms[name], i);
 }
 
-void Shader::setUniform(const std::string &name, bool b) {
+void Shader::setUniform(const std::string &name, bool b)
+{
     glUniform1i(m_uniforms[name], static_cast<GLint>(b));
 }
 
-void Shader::setUniformArrayByIndex(const std::string &name, float f, size_t index) {
-    glUniform1f(m_uniformArrays[std::make_tuple(name, index)], f);
-}
+// ================== Creating the Program
 
-void Shader::setUniformArrayByIndex(const std::string &name, int i, size_t index) {
-    glUniform1i(m_uniformArrays[std::make_tuple(name, index)], i);
-}
-
-void Shader::setUniformArrayByIndex(const std::string &name, bool b, size_t index) {
-    glUniform1i(m_uniformArrays[std::make_tuple(name, index)], static_cast<GLint>(b));
-}
-
-void Shader::attachShaders(const std::vector<GLuint> &shaders) {
-    std::for_each(shaders.begin(), shaders.end(), [this](int s){ glAttachShader(m_programID, s); });
-}
-
-void Shader::buildShaderProgramFromShaders(const std::vector<GLuint> &shaders) {
-    attachShaders(shaders);
-    linkShaderProgram();
-    detachShaders(shaders);
-    deleteShaders(shaders);
-}
-
-GLuint Shader::createFragmentShaderFromSource(const std::string &source) {
-   return createShaderFromSource(source, GL_FRAGMENT_SHADER);
-}
-
-GLuint Shader::createGeometryShaderFromSource(const std::string &source) {
-    return createShaderFromSource(source, GL_GEOMETRY_SHADER);
-}
-
-void Shader::compileShader(GLuint handle, const std::string &source) {
-    const GLchar* codeArray[] = { source.c_str() };
-    glShaderSource(handle, 1, codeArray, nullptr);
-    glCompileShader(handle);
-}
-
-GLuint Shader::createVertexShaderFromSource(const std::string &source) {
-    return createShaderFromSource(source, GL_VERTEX_SHADER);
-}
-
-GLuint Shader::createShaderFromSource(const std::string &source, GLenum shaderType) {
-    GLuint shaderHandle = glCreateShader(shaderType);
-    compileShader(shaderHandle, source);
-    checkShaderCompilationStatus(shaderHandle);
-    return shaderHandle;
-}
-
-void Shader::createProgramID() {
+void Shader::createProgramID()
+{
     m_programID = glCreateProgram();
 }
 
-void Shader::detachShaders(const std::vector<GLuint> &shaders) {
-    std::for_each(shaders.begin(), shaders.end(), [this](int s){ glDetachShader(m_programID, s); });
-}
+void Shader::buildShaderProgramFromShaders(const std::vector<GLuint> &shaderHandles)
+{
+    // Attach shaders
+    for (const GLuint &shaderHandle : shaderHandles) {
+        glAttachShader(m_programID, shaderHandle);
+    }
 
-void Shader::deleteShaders(const std::vector<GLuint> &shaders) {
-    std::for_each(shaders.begin(), shaders.end(), [](int s){ glDeleteShader(s); });
-}
-
-void Shader::linkShaderProgram() {
+    // Link program
     glLinkProgram(m_programID);
     checkShaderLinkStatus(m_programID);
+
+    // Detach and delete shaders
+    for (const GLuint &shaderHandle : shaderHandles) {
+        glDetachShader(m_programID, shaderHandle);
+        glDeleteShader(shaderHandle);
+    }
 }
+
+// ================== Creating Shaders From Filepaths
+
+std::string Shader::getFileContents(std::string filepath)
+{
+    QString filepathStr = QString::fromStdString(filepath);
+    QFile file(filepathStr);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        throw std::runtime_error(std::string("Failed to open shader: ") + filepath);
+    }
+
+    QTextStream stream(&file);
+    QString contents = stream.readAll();
+    file.close();
+
+    return contents.toStdString();
+}
+
+GLuint Shader::createShaderFromString(const std::string &str, GLenum shaderType)
+{
+    GLuint shaderHandle = glCreateShader(shaderType);
+
+    // Compile shader code
+    const char *codePtr = str.c_str();
+    glShaderSource(shaderHandle, 1, &codePtr, nullptr); // Assumes code is null terminated
+    glCompileShader(shaderHandle);
+
+    checkShaderCompilationStatus(shaderHandle);
+
+    return shaderHandle;
+}
+
+// ================== Discovering Attributes/Uniforms/Textures
 
 void Shader::discoverShaderData() {
     discoverAttributes();
@@ -198,13 +191,13 @@ void Shader::discoverUniforms() {
 bool Shader::isUniformArray(const GLchar *name, GLsizei nameLength) {
     // Check if the last 3 characters are '[0]'
     return (name[nameLength - 3] == '[') &&
-           (name[nameLength - 2] == '0') &&
-           (name[nameLength - 1] == ']');
+            (name[nameLength - 2] == '0') &&
+            (name[nameLength - 1] == ']');
 }
 
 bool Shader::isTexture(GLenum type) {
     return (type == GL_SAMPLER_2D) ||
-           (type == GL_SAMPLER_CUBE);
+            (type == GL_SAMPLER_CUBE);
 }
 
 void Shader::addUniformArray(const std::string &name, size_t size) {
@@ -239,48 +232,3 @@ void Shader::addUniform(const std::string &name) {
     m_trackedUniforms[name] = false;
 #endif
 }
-
-bool Shader::printDebug() {
-    bool noErrors = true;
-
-    for(auto &pair : m_trackedUniforms) {
-        if(!pair.second) {
-            std::cerr << "Uniform '" << pair.first << "' was not set." << std::endl;
-            noErrors = false;
-        }
-    }
-
-    for(auto &pair : m_trackedTextures) {
-        if(!pair.second) {
-            std::cerr << "Texture '" << pair.first << "' was not set." << std::endl;
-            noErrors = false;
-        }
-    }
-
-    return noErrors;
-}
-
-void Shader::resetDebug() {
-    for(auto &pair : m_trackedUniforms) {
-        m_trackedUniforms[pair.first] = false;
-    }
-
-    for(auto &pair : m_trackedTextures) {
-        m_trackedTextures[pair.first] = false;
-    }
-}
-
-std::string Shader::getFileContents(std::string path)
-{
-    QString qpath = QString::fromStdString(path);
-    QFile file(qpath);
-
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream stream(&file);
-        QString contents = stream.readAll();
-        file.close();
-        return contents.toStdString();
-    }
-    return "";
-}
-
