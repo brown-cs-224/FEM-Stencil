@@ -67,7 +67,7 @@ void GLWidget::initializeGL()
     Eigen::Vector3f eye    = {0, 2, -5};
     Eigen::Vector3f target = {0, 1,  0};
     m_camera.lookAt(eye, target);
-    m_camera.setTarget(target);
+    m_camera.setOrbitPoint(target);
     m_camera.setPerspective(120, width() / static_cast<float>(height()), 0.1, 50);
 
     m_deltaTimeProvider.start();

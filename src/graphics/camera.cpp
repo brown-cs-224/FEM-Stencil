@@ -3,80 +3,104 @@
 #include <iostream>
 
 Camera::Camera()
-    : m_pitch(0),
-      m_yaw(0),
+    : m_position(0,0,0),
+      m_pitch(0), m_yaw(0),
       m_look(0, 0, 1),
-      m_target(0, 0, 0),
-      m_viewDirty(true),
-      m_projDirty(true),
-      m_fovY(90),
-      m_aspect(1),
-      m_near(0.1f),
-      m_far(50.f),
-      m_zoom(1),
+      m_orbitPoint(0, 0, 0),
+      m_isOrbiting(false),
       m_view(Eigen::Matrix4f::Identity()),
       m_proj(Eigen::Matrix4f::Identity()),
-      m_isOrbiting(false)
+      m_viewDirty(true),
+      m_projDirty(true),
+      m_fovY(90), m_aspect(1), m_near(0.1f), m_far(50.f),
+      m_zoom(1)
 {}
 
-void Camera::setPosition(const Eigen::Vector3f &pos)
+// ================== Position
+
+void Camera::setPosition(const Eigen::Vector3f &position)
 {
-    m_position = pos;
+    m_position  = position;
     m_viewDirty = true;
 }
 
-void Camera::move(const Eigen::Vector3f &move)
+void Camera::move(const Eigen::Vector3f &deltaPosition)
 {
-    if (move.dot(move) == 0) return;
+    if (deltaPosition.squaredNorm() == 0) return;
 
-    m_position += move;
+    m_position += deltaPosition;
     m_viewDirty = true;
 }
 
-void Camera::rotate(float x, float y)
-{
-    m_yaw += x;
-    m_pitch += y;
-    m_pitch = m_pitch >= M_PI_2 ? M_PI_2 - 0.01 : m_pitch;
-    m_pitch = m_pitch <= -M_PI_2 ? -M_PI_2 + 0.01 : m_pitch;
-    m_viewDirty = true;
-    updateLook();
-}
+// ================== Rotation
 
 void Camera::setRotation(float pitch, float yaw)
 {
     m_pitch = pitch;
-    m_yaw = yaw;
+    m_yaw   = yaw;
     m_viewDirty = true;
     updateLook();
 }
 
-void Camera::setPitch(float pitch)
+void Camera::rotate(float deltaPitch, float deltaYaw)
 {
-    m_pitch = pitch;
+    m_pitch += deltaPitch;
+    m_yaw   += deltaYaw;
+    m_pitch  = std::clamp(m_pitch, (float) -M_PI_2 + 0.01f, (float) M_PI_2 - 0.01f);
     m_viewDirty = true;
     updateLook();
 }
 
-void Camera::setYaw(float yaw)
+// ================== Zoom
+
+void Camera::setZoom(float zoom)
 {
-    m_yaw = yaw;
+    m_zoom = zoom;
     m_viewDirty = true;
-    updateLook();
 }
+
+void Camera::zoom(float zoomMultiplier)
+{
+    m_zoom *= zoomMultiplier;
+    m_viewDirty = true;
+}
+
+// ================== Position and Rotation
 
 void Camera::lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target)
 {
-    m_position = eye;
-    m_look = target - eye;
+    m_position  = eye;
+    m_look      = target - eye;
+    m_viewDirty = true;
+    updatePitchAndYaw();
+}
+
+// ================== Orbiting
+
+void Camera::setOrbitPoint(const Eigen::Vector3f &orbitPoint)
+{
+    m_orbitPoint = orbitPoint;
     m_viewDirty = true;
 }
 
-void Camera::setTarget(const Eigen::Vector3f &target)
+bool Camera::getIsOrbiting()
 {
-    m_target = target;
+    return m_isOrbiting;
+}
+
+void Camera::setIsOrbiting(bool isOrbiting)
+{
+    m_isOrbiting = isOrbiting;
     m_viewDirty = true;
 }
+
+void Camera::toggleIsOrbiting()
+{
+    m_isOrbiting = !m_isOrbiting;
+    m_viewDirty = true;
+}
+
+// ================== Intrinsics
 
 void Camera::setPerspective(float fovY, float aspect, float near, float far)
 {
@@ -93,24 +117,14 @@ void Camera::setAspect(float aspect)
     m_projDirty = true;
 }
 
-void Camera::zoom(float zoom)
-{
-    m_zoom *= zoom;
-    m_viewDirty = true;
-}
-
-void Camera::setZoom(float zoom)
-{
-    m_zoom = zoom;
-    m_viewDirty = true;
-}
+// ================== Important Getters
 
 const Eigen::Matrix4f &Camera::getView()
 {
     if (m_viewDirty) {
         Eigen::Vector3f pos;
         if (m_isOrbiting) {
-            pos = m_target - m_look * m_zoom;
+            pos = m_orbitPoint - m_look * m_zoom;
         } else {
             pos = m_position;
         }
@@ -152,27 +166,17 @@ const Eigen::Vector3f &Camera::getLook()
     return m_look;
 }
 
-bool Camera::getIsOrbiting()
-{
-    return m_isOrbiting;
-}
-
-void Camera::setIsOrbiting(bool isOrbiting)
-{
-    m_isOrbiting = isOrbiting;
-    m_viewDirty = true;
-}
-
-void Camera::toggleIsOrbiting()
-{
-    m_isOrbiting = !m_isOrbiting;
-    m_viewDirty = true;
-}
-
+// ================== Private Helpers
 
 void Camera::updateLook()
 {
     m_look = Eigen::Vector3f(0, 0, 1);
     m_look = Eigen::AngleAxis<float>(m_pitch, Eigen::Vector3f::UnitX()) * m_look;
-    m_look = Eigen::AngleAxis<float>(m_yaw, Eigen::Vector3f::UnitY()) * m_look;
+    m_look = Eigen::AngleAxis<float>(m_yaw,   Eigen::Vector3f::UnitY()) * m_look;
+}
+
+void Camera::updatePitchAndYaw()
+{
+    m_pitch = asin(-m_look.y());
+    m_yaw   = atan2(m_look.x(), m_look.z());
 }
