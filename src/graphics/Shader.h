@@ -7,7 +7,7 @@
 
 #include <GL/glew.h>
 #include "Eigen/Dense"
-#include "Eigen/OpenGLSupport"
+#include "util/unsupportedeigenthing/OpenGLSupport"
 
 
 class Shader {

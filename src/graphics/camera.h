@@ -14,15 +14,13 @@ public:
     void setRotation(float      pitch, float      yaw);
     void rotate     (float deltaPitch, float deltaYaw);
 
-    void setZoom(float zoom);
-    void zoom   (float zoomMultiplier);
-
     void lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target);
 
     void setOrbitPoint(const Eigen::Vector3f &target);
     bool getIsOrbiting();
     void setIsOrbiting(bool orbit);
     void toggleIsOrbiting();
+    void zoom(float zoomMultiplier);
 
     const Eigen::Matrix4f &getView();
     const Eigen::Matrix4f &getProjection();
@@ -34,6 +32,8 @@ public:
 private:
     void updateLook();
     void updatePitchAndYaw();
+
+    // Do not mess with the order of these variables. Some Eigen voodoo will cause an inexplicable crash.
 
     Eigen::Vector3f m_position;
 

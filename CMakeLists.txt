@@ -47,7 +47,8 @@ add_executable(${PROJECT_NAME}
     src/graphics/Shader.h
     src/graphics/shape.h
 
-    libs/tiny_obj/tiny_obj_loader.h
+    util/tiny_obj_loader.h
+    util/unsupportedeigenthing/OpenGLSupport
 )
 
 # GLEW: this creates its library and allows you to `#include "GL/glew.h"`

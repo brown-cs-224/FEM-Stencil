@@ -29,7 +29,13 @@ void Camera::move(const Eigen::Vector3f &deltaPosition)
     if (deltaPosition.squaredNorm() == 0) return;
 
     m_position += deltaPosition;
+
+    if (m_isOrbiting) {
+        m_orbitPoint += deltaPosition;
+    }
+
     m_viewDirty = true;
+
 }
 
 // ================== Rotation
@@ -49,20 +55,10 @@ void Camera::rotate(float deltaPitch, float deltaYaw)
     m_pitch  = std::clamp(m_pitch, (float) -M_PI_2 + 0.01f, (float) M_PI_2 - 0.01f);
     m_viewDirty = true;
     updateLook();
-}
 
-// ================== Zoom
-
-void Camera::setZoom(float zoom)
-{
-    m_zoom = zoom;
-    m_viewDirty = true;
-}
-
-void Camera::zoom(float zoomMultiplier)
-{
-    m_zoom *= zoomMultiplier;
-    m_viewDirty = true;
+    if (m_isOrbiting) {
+        m_position = m_orbitPoint - m_look * m_zoom;
+    }
 }
 
 // ================== Position and Rotation
@@ -70,7 +66,7 @@ void Camera::zoom(float zoomMultiplier)
 void Camera::lookAt(const Eigen::Vector3f &eye, const Eigen::Vector3f &target)
 {
     m_position  = eye;
-    m_look      = target - eye;
+    m_look      = (target - eye).normalized();
     m_viewDirty = true;
     updatePitchAndYaw();
 }
@@ -98,6 +94,21 @@ void Camera::toggleIsOrbiting()
 {
     m_isOrbiting = !m_isOrbiting;
     m_viewDirty = true;
+
+    if (m_isOrbiting) {
+        m_zoom = (m_orbitPoint - m_position).norm();
+        m_look = (m_orbitPoint - m_position).normalized();
+        updatePitchAndYaw();
+    }
+}
+
+void Camera::zoom(float zoomMultiplier)
+{
+    if (!m_isOrbiting) return;
+
+    m_zoom *= zoomMultiplier;
+    m_position = m_orbitPoint - m_look * m_zoom;
+    m_viewDirty = true;
 }
 
 // ================== Intrinsics
@@ -122,12 +133,6 @@ void Camera::setAspect(float aspect)
 const Eigen::Matrix4f &Camera::getView()
 {
     if (m_viewDirty) {
-        Eigen::Vector3f pos;
-        if (m_isOrbiting) {
-            pos = m_orbitPoint - m_look * m_zoom;
-        } else {
-            pos = m_position;
-        }
         Eigen::Matrix3f R;
         Eigen::Vector3f f = m_look.normalized();
         Eigen::Vector3f u = Eigen::Vector3f::UnitY();
@@ -137,7 +142,7 @@ const Eigen::Matrix4f &Camera::getView()
         R.col(1) = u;
         R.col(2) = -f;
         m_view.topLeftCorner<3, 3>() = R.transpose();
-        m_view.topRightCorner<3, 1>() = -R.transpose() * pos;
+        m_view.topRightCorner<3, 1>() = -R.transpose() * m_position;
         m_view(3, 3) = 1.f;
         m_viewDirty = false;
     }
@@ -173,10 +178,11 @@ void Camera::updateLook()
     m_look = Eigen::Vector3f(0, 0, 1);
     m_look = Eigen::AngleAxis<float>(m_pitch, Eigen::Vector3f::UnitX()) * m_look;
     m_look = Eigen::AngleAxis<float>(m_yaw,   Eigen::Vector3f::UnitY()) * m_look;
+    m_look = m_look.normalized();
 }
 
 void Camera::updatePitchAndYaw()
 {
-    m_pitch = asin(-m_look.y());
-    m_yaw   = atan2(m_look.x(), m_look.z());
+    m_pitch = asinf(-m_look.y());
+    m_yaw   = atan2f(m_look.x(), m_look.z());
 }

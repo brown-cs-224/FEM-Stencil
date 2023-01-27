@@ -115,8 +115,8 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 
     if (deltaX == 0 && deltaY == 0) return;
 
-    m_camera.rotate(-deltaX * ROTATE_SPEED,
-                    deltaY * ROTATE_SPEED);
+    m_camera.rotate(deltaY * ROTATE_SPEED,
+                    -deltaX * ROTATE_SPEED);
 
     m_lastX = currX;
     m_lastY = currY;
@@ -129,7 +129,7 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event)
 
 void GLWidget::wheelEvent(QWheelEvent *event)
 {
-    float zoom = 1 - event->pixelDelta().x() * 0.1f / 120;
+    float zoom = 1 - event->pixelDelta().y() * 0.1f / 120.f;
     m_camera.zoom(zoom);
 }
 
