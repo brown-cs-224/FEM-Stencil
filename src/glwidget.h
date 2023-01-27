@@ -6,7 +6,7 @@
 
 #include "simulation.h"
 #include "graphics/camera.h"
-#include "graphics/Shader.h"
+#include "graphics/shader.h"
 
 #include <QOpenGLWidget>
 #include <QElapsedTimer>

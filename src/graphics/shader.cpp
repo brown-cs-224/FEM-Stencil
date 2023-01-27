@@ -1,5 +1,5 @@
-#include "Shader.h"
-#include "GraphicsDebug.h"
+#include "graphics/shader.h"
+#include "graphics/graphicsdebug.h"
 
 #include <QFile>
 #include <QString>

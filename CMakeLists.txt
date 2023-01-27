@@ -33,18 +33,18 @@ add_executable(${PROJECT_NAME}
     src/simulation.cpp
     src/glwidget.cpp
     src/graphics/camera.cpp
-    src/graphics/GraphicsDebug.cpp
-    src/graphics/MeshLoader.cpp
-    src/graphics/Shader.cpp
+    src/graphics/graphicsdebug.cpp
+    src/graphics/meshloader.cpp
+    src/graphics/shader.cpp
     src/graphics/shape.cpp
 
     src/mainwindow.h
     src/simulation.h
     src/glwidget.h
     src/graphics/camera.h
-    src/graphics/GraphicsDebug.h
-    src/graphics/MeshLoader.h
-    src/graphics/Shader.h
+    src/graphics/graphicsdebug.h
+    src/graphics/meshloader.h
+    src/graphics/shader.h
     src/graphics/shape.h
 
     util/tiny_obj_loader.h

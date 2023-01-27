@@ -1,5 +1,5 @@
 #include <GL/glew.h>
-#include "GraphicsDebug.h"
+#include "graphics/graphicsdebug.h"
 
 #include <iostream>
 #include <vector>

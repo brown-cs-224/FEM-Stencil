@@ -1,8 +1,7 @@
 #include "simulation.h"
+#include "graphics/meshloader.h"
 
 #include <iostream>
-
-#include "graphics/MeshLoader.h"
 
 using namespace Eigen;
 

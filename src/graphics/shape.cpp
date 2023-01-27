@@ -1,8 +1,7 @@
-#include "shape.h"
+#include "graphics/shape.h"
+#include "graphics/shader.h"
 
 #include <iostream>
-
-#include "graphics/Shader.h"
 
 using namespace Eigen;
 using namespace std;
