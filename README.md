@@ -21,8 +21,6 @@ This assignment is out of **100 points**.
 Your simulator must implement at least the following features:
 
 * Extract the surface mesh from your tetrahedral mesh **(10 points)**
-  * You will need this to render your simulation (see below).
-  * How might you do this? (i.e. how can you tell whether the face of a tetrahedron is a boundary face or an internal face?)
 * Compute and apply force due to gravity **(5 points)**
 * Compute and apply internal elastic forces **(30 points)**
   * Compute Green’s strain for each element
@@ -35,33 +33,18 @@ Your simulator must implement at least the following features:
   * The simple ‘penalty force’ method described in Section 3.3 of [O’Brien and Hodgins](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) can work, but it's not terribly stable.
   * A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a *normal component* (i.e. parallel to surface normal of the collider at the point of intersection and a *tangential component* (perpendicular to the collider normal), (3) Set the normal component of the velocity to zero, (4) Scale the tangential component of the velocity by some friction constant < 1. 
 * Integrate your simulation forward in time using the explicit [midpoint method](https://www.pixar.com/assets/pbm2001/pdf/notesb.pdf) **(10 points)** (regular Euler integration recommended to start with)
-* Video (described below) **(10 points)**
+* Video **(10 points)**
+  * You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up (i.e. ways to apply external forces to the mesh). Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
+    * There are a few different ways you might go about making such videos:
+    * Screen capture an OpenGL rendering of your simulation, e.g. using the interactive viewer code that we provide below (see “Resources”).
+    * Export frame-by-frame meshes from your simulator and use your path tracer from Assignment 1 to render them.
+    * Use some other modeling/animation/rendering software to render exported meshes (e.g. Maya, Blender).
+  * To turn a set of frame images into a video, you can use [FFMPEG](https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/).
 * README **(5 points)**
+  * You must also submit a Markdown README file. This file should describe how to run your simulator (e.g. what command line arguments are needed?) This file should also list all of the features your simulator implements. Finally, it should describe what features are demonstrated by the video(s) you’ve submitted. You should embed the videos into the README file.
 
 Successfully implementing all of the requirements results in a total of **90/100 points**.
 To score **100/100** (or more!), you’ll need to implement some extra features.
-
-### Video
-
-You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features).
-
-There are a few different ways you might go about making such videos:
-
-* Screen capture an OpenGL rendering of your simulation, e.g. using the interactive viewer code that we provide below (see “Resources”).
-* Export frame-by-frame meshes from your simulator and use your path tracer from Assignment 1 to render them.
-* Use some other modeling/animation/rendering software to render exported meshes (e.g. Maya, Blender).
-
-Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up (i.e. ways to apply external forces to the mesh).
-Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
-To turn a set of frame images into a video, you can use [FFMPEG](https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/).
-
-### README
-
-You must also submit a Markdown README file. This file should describe how to run your simulator (e.g. what command line arguments are needed?)
-
-This file should also list all of the features your simulator implements.
-
-Finally, it should describe what features are demonstrated by the video(s) you’ve submitted. You should embed the videos into the README file.
 
 ### Extra Features
 Each of the following features that you implement will earn you extra points. The features are ordered roughly by difficulty of implementation.
@@ -85,7 +68,7 @@ Each of the following features that you implement will earn you extra points. Th
   * Or, collisions between two deformable meshes.
   * The [O’Brien and Hodgins paper](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) has some suggestions for how to do this.
 * Something else!
-  * This list is not meant to be exhaustive--if you’ve got another advanced feature in mind, go for it! (though you may want to ask a TA orr the instructor first if you’re concerned about whether the idea is feasible) 
+  * This list is not meant to be exhaustive--if you’ve got another advanced feature in mind, go for it! (though you may want to ask a TA or the instructor first if you’re concerned about whether the idea is feasible) 
 
 ### Advanced Extra Features
 These extra features are significantly more challenging to implement, and they involve reading other papers to implement. Some of these are probably big enough in scope to be closer to final project ideas, to be honest. I’ve listed them here for completeness and to potentially get some people interested in some of these ideas :)
