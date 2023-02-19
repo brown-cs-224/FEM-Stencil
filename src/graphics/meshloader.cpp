@@ -12,7 +12,7 @@
 
 using namespace Eigen;
 
-bool MeshLoader::loadTetMesh(const std::string &filepath, std::vector<Eigen::Vector3f> &vertices, std::vector<Eigen::Vector4i> &tets)
+bool MeshLoader::loadTetMesh(const std::string &filepath, std::vector<Eigen::Vector3d> &vertices, std::vector<Eigen::Vector4i> &tets)
 {
     QString qpath = QString::fromStdString(filepath);
     QFile file(qpath);
@@ -30,9 +30,9 @@ bool MeshLoader::loadTetMesh(const std::string &filepath, std::vector<Eigen::Vec
         QString line = in.readLine();
         auto match = vrxp.match(line);
         if(match.hasMatch()) {
-            vertices.emplace_back(match.captured(1).toFloat(),
-                                  match.captured(2).toFloat(),
-                                  match.captured(3).toFloat());
+            vertices.emplace_back(match.captured(1).toDouble(),
+                                  match.captured(2).toDouble(),
+                                  match.captured(3).toDouble());
             continue;
         }
         match = trxp.match(line);

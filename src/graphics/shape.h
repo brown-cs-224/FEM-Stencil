@@ -1,17 +1,10 @@
-#pragma once
+#ifndef SHAPE_H
+#define SHAPE_H
 
 #include <GL/glew.h>
 #include <vector>
 
-#define EIGEN_DONT_VECTORIZE
-#define EIGEN_DISABLE_UNALIGNED_ARRAY_ASSERT
-
-#include "Eigen/StdVector"
-#include "Eigen/Dense"
-
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix2f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3f)
-EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Matrix3i)
+#include <Eigen/Dense>
 
 class Shader;
 
@@ -20,12 +13,12 @@ class Shape
 public:
     Shape();
 
-    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals, const std::vector<Eigen::Vector3i> &triangles);
-    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles);
-    void init(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices);
+    void init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals, const std::vector<Eigen::Vector3i> &triangles);
+    void init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3i> &triangles);
+    void init(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3i> &triangles, const std::vector<Eigen::Vector4i> &tetIndices);
 
-    void setVertices(const std::vector<Eigen::Vector3f> &vertices, const std::vector<Eigen::Vector3f> &normals);
-    void setVertices(const std::vector<Eigen::Vector3f> &vertices);
+    void setVertices(const std::vector<Eigen::Vector3d> &vertices, const std::vector<Eigen::Vector3d> &normals);
+    void setVertices(const std::vector<Eigen::Vector3d> &vertices);
 
     void setModelMatrix(const Eigen::Affine3f &model);
 
@@ -55,3 +48,5 @@ private:
 
     bool m_wireframe;
 };
+
+#endif // SHAPE_H

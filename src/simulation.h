@@ -11,7 +11,7 @@ public:
 
     void init();
 
-    void update(float seconds);
+    void update(double seconds);
 
     void draw(Shader *shader);
 

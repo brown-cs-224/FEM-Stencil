@@ -13,7 +13,7 @@ void Simulation::init()
     //    (note: your working directory must be set to the root directory of the starter code
     //    repo for this file to load correctly). You'll probably want to instead have this code
     //    load up a tet mesh based on e.g. a file path specified with a command line argument.
-    std::vector<Vector3f> vertices;
+    std::vector<Vector3d> vertices;
     std::vector<Vector4i> tets;
     if (MeshLoader::loadTetMesh(":/example-meshes/single-tet.mesh", vertices, tets)) {
         // STUDENTS: This code computes the surface mesh of the loaded tet mesh, i.e. the faces
@@ -33,7 +33,7 @@ void Simulation::init()
     initGround();
 }
 
-void Simulation::update(float seconds)
+void Simulation::update(double seconds)
 {
     // STUDENTS: This method should contain all the time-stepping logic for your simulation.
     //   Specifically, the code you write here should compute new, updated vertex positions for your
@@ -58,7 +58,7 @@ void Simulation::toggleWire()
 
 void Simulation::initGround()
 {
-    std::vector<Vector3f> groundVerts;
+    std::vector<Vector3d> groundVerts;
     std::vector<Vector3i> groundFaces;
     groundVerts.emplace_back(-5, 0, -5);
     groundVerts.emplace_back(-5, 0, 5);
