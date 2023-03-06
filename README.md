@@ -41,7 +41,14 @@ Your simulator must implement at least the following features:
     * Use some other modeling/animation/rendering software to render exported meshes (e.g. Maya, Blender).
   * To turn a set of frame images into a video, you can use [FFMPEG](https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/).
 * README **(5 points)**
-  * You must also submit a Markdown README file. This file should describe how to run your simulator (e.g. what command line arguments are needed?) This file should also list all of the features your simulator implements. Finally, it should describe what features are demonstrated by the video(s) you’ve submitted. You should embed the videos into the README file.
+  * Your README should explain your logic for 
+    * extracting the surface mesh
+    * computing and applying internal forces
+    * collision resolution
+    * your explicit integration method
+    * and any extra features you choose to implement
+  * Explanations should be 3 sentences each maximum
+  * You should also embed your videos into the README file
 
 Successfully implementing all of the requirements results in a total of **90/100 points**.
 To score **100/100** (or more!), you’ll need to implement some extra features.
