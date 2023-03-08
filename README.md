@@ -140,7 +140,7 @@ Speaking of controls: the controls offered by the starter code are:
  * Toggle orbit mode: C (changes the camera from a first-person view to an orbiting camera a la what the Maya editor does)
  * Toggle between displaying the surface mesh and a wireframe of the full tet mesh: T
 
-When the program first loads, you should see a ground plane and a single tet floating in space, against a gray background.
+When the program first loads, you should see a ground plane and a single tet floating in space.
 If the tet does not display: check the console output. Most likely the .mesh file failed to load because the file couldn't be found. You'll need to set the working directory in Qt Creator to be the root directory of this repository. To do that, select "Projects" on the left-hand sidebar in Qt Creator, select "Run" under the "Build & Run options", and enter the path to the repo root in the "Working directory" field.
 
 ### Implementation & Debugging Tips
