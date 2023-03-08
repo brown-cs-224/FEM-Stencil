@@ -31,10 +31,10 @@ Your simulator must implement at least the following features:
 * Resolve collisions **(10 points)**
   * You must implement collision between the mesh and a ground plane, as well as at least one other type of obstacle (e.g. spheres).
   * The simple ‘penalty force’ method described in Section 3.3 of [O’Brien and Hodgins](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) can work, but it's not terribly stable.
-  * A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a *normal component* (i.e. parallel to surface normal of the collider at the point of intersection and a *tangential component* (perpendicular to the collider normal), (3) Set the normal component of the velocity to zero, (4) Scale the tangential component of the velocity by some friction constant < 1. 
+  * A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a *normal component* (i.e. parallel to surface normal of the collider at the point of intersection and a *tangential component* (perpendicular to the collider normal), (3) Set the normal component of the velocity to zero, (4) Scale the tangential component of the velocity by some friction constant between 0 and 1. 
 * Integrate your simulation forward in time using the explicit [midpoint method](https://www.pixar.com/assets/pbm2001/pdf/notesb.pdf) **(10 points)** (regular Euler integration recommended to start with)
 * Video **(10 points)**
-  * You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up (i.e. ways to apply external forces to the mesh). Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
+  * You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up. Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
     * There are a few different ways you might go about making such videos:
     * Screen capture an OpenGL rendering of your simulation, e.g. using the interactive viewer code that we provide below (see “Resources”).
     * Export frame-by-frame meshes from your simulator and use your path tracer from Assignment 1 to render them.
@@ -70,7 +70,7 @@ Each of the following features that you implement will earn you extra points. Th
   * Many simulator operations are ‘embarrassingly parallel’ (force computations, integrator steps, etc.)
   * Even something as simple as [OpenMP’s parallel for loop](http://supercomputingblog.com/openmp/tutorial-parallel-for-loops-with-openmp/) can buy you significant speedups, if applied in the right places.
 * Interactivity **(10 points)**
-  * Modify the scene viewer (see “Resources” below) to allow the user to poke, push, drag, etc. a deformable mesh.
+  * Allow the user to poke, push, drag, etc. a deformable mesh.
 * Self collisions **(15 points)**
   * Or, collisions between two deformable meshes.
   * The [O’Brien and Hodgins paper](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) has some suggestions for how to do this.
