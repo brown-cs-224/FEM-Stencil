@@ -149,6 +149,7 @@ If the tet does not display: check the console output. Most likely the .mesh fil
 - If your mesh has no forces applied, the deformation gradient for each element should be the identity matrix.
 - A sanity check: try initializing the position of one or more vertices to be different than the rest configuration; verify that the mesh moves back to its rest state when you run the simulation.
 - See the lecture slides for tips on what to do if your simulation explodes.
+- Simulation will involve many parameters; you may find it helpful to use a config.ini file to set them then use QSettings[https://doc.qt.io/qt-6/qsettings.html] to extract them  
 - The lecture slides contain a few examples of material parameters. If you want more, you can check out the tables given [here](https://www.efunda.com/materials/common_matl/Common_Matl.cfm?MatlPhase=Solid&MatlProp=Mechanical) and [here](http://web.mit.edu/16.20/homepage/3_Constitutive/Constitutive_files/module_3_no_solutions.pdf). Be aware that most of these materials are very stiff and will likely be difficult to simulate in a stable manner. [This Wikipedia page](https://en.wikipedia.org/wiki/Lam%C3%A9_parameters) lists formulas for converting between different types of material parameters. What you want are “Lamé's first parameter” (that’s λ)  and “Shear modulus” (that’s μ). 
 - Here’s a set of parameters that have worked for students in previous years (with midpoint and rk4 integrators for the sphere and ellipsoid and a timestep of 0.001 in `view.cpp`):
   - const Vector3f \_gravity = Vector3f(0.f, -.1f, 0.f);
