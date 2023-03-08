@@ -132,7 +132,7 @@ The starter code in this repo provides a simple 3D viewer for tetrahedral mesh s
 As given, the starter code will load up and visualize a single tetrahedron. Your job is to modify the code to load arbitrary meshes (e.g. the ones in `/example-meshes`), extract their surface meshes for visualization, and to compute simulation time step updates to the vertex positions of the mesh.
 
 You'll want to look at `src/simulation.cpp` to get started, as that's the only file you need to change (although you'll probably make several of your own new files, too).
-You also might want to look at `src/view.cpp`, if you're interested in adding new interactivity/controls to the program.
+You also might want to look at `src/glwidget.cpp`, if you're interested in adding new interactivity/controls to the program.
 
 Speaking of controls: the controls offered by the starter code are:
  * Move Camera: WASD
