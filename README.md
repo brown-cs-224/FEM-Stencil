@@ -31,17 +31,28 @@ Your simulator must implement at least the following features:
 * Resolve collisions **(10 points)**
   * You must implement collision between the mesh and a ground plane, as well as at least one other type of obstacle (e.g. spheres).
   * The simple ‘penalty force’ method described in Section 3.3 of [O’Brien and Hodgins](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) can work, but it's not terribly stable.
+<<<<<<< HEAD
   * A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a *normal component* (i.e. parallel to surface normal of the collider at the point of intersection and a *tangential component* (perpendicular to the collider normal), (3) Reflect the normal component of the velocity and scale by some friction constant < 1, (4) Scale the tangential component of the velocity by some friction constant < 1. 
+=======
+  * A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a *normal component* (i.e. parallel to surface normal of the collider at the point of intersection and a *tangential component* (perpendicular to the collider normal), (3) Set the normal component of the velocity to zero, (4) Scale the tangential component of the velocity by some friction constant between 0 and 1. 
+>>>>>>> e9985aafcc5dce6dc8bd87ba64d09b19f7b5874e
 * Integrate your simulation forward in time using the explicit [midpoint method](https://www.pixar.com/assets/pbm2001/pdf/notesb.pdf) **(10 points)** (regular Euler integration recommended to start with)
 * Video **(10 points)**
-  * You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up (i.e. ways to apply external forces to the mesh). Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
+  * You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up. Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
     * There are a few different ways you might go about making such videos:
     * Screen capture an OpenGL rendering of your simulation, e.g. using the interactive viewer code that we provide below (see “Resources”).
     * Export frame-by-frame meshes from your simulator and use your path tracer from Assignment 1 to render them.
     * Use some other modeling/animation/rendering software to render exported meshes (e.g. Maya, Blender).
   * To turn a set of frame images into a video, you can use [FFMPEG](https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/).
 * README **(5 points)**
-  * You must also submit a Markdown README file. This file should describe how to run your simulator (e.g. what command line arguments are needed?) This file should also list all of the features your simulator implements. Finally, it should describe what features are demonstrated by the video(s) you’ve submitted. You should embed the videos into the README file.
+  * Your README should explain your logic for 
+    * extracting the surface mesh
+    * computing and applying internal forces
+    * collision resolution
+    * your explicit integration method
+    * and any extra features you choose to implement
+  * Explanations should be 3 sentences each maximum
+  * You should also embed your videos into the README file
 
 Successfully implementing all of the requirements results in a total of **90/100 points**.
 To score **100/100** (or more!), you’ll need to implement some extra features.
@@ -54,7 +65,7 @@ Each of the following features that you implement will earn you extra points. Th
   * Miss programming shaders? Modify shader.frag to add some fancy effects. Skyboxes, shadows, FBO hacks, and more are all welcome.
 * A higher-order explicit integrator **(5 points)**
   * This will allow you to take larger simulation timesteps.
-  * Runge-Kutte 4
+  * Runge-Kutta 4
   * [Verlet integration](https://resources.saylor.org/wwwresources/archived/site/wp-content/uploads/2011/06/MA221-6.1.pdf)
 * Adaptive time stepping **(5 points)**
   * Take the largest time step you can take while remaining within some error threshold.
@@ -63,7 +74,7 @@ Each of the following features that you implement will earn you extra points. Th
   * Many simulator operations are ‘embarrassingly parallel’ (force computations, integrator steps, etc.)
   * Even something as simple as [OpenMP’s parallel for loop](http://supercomputingblog.com/openmp/tutorial-parallel-for-loops-with-openmp/) can buy you significant speedups, if applied in the right places.
 * Interactivity **(10 points)**
-  * Modify the scene viewer (see “Resources” below) to allow the user to poke, push, drag, etc. a deformable mesh.
+  * Allow the user to poke, push, drag, etc. a deformable mesh.
 * Self collisions **(15 points)**
   * Or, collisions between two deformable meshes.
   * The [O’Brien and Hodgins paper](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) has some suggestions for how to do this.
@@ -125,7 +136,7 @@ The starter code in this repo provides a simple 3D viewer for tetrahedral mesh s
 As given, the starter code will load up and visualize a single tetrahedron. Your job is to modify the code to load arbitrary meshes (e.g. the ones in `/example-meshes`), extract their surface meshes for visualization, and to compute simulation time step updates to the vertex positions of the mesh.
 
 You'll want to look at `src/simulation.cpp` to get started, as that's the only file you need to change (although you'll probably make several of your own new files, too).
-You also might want to look at `src/view.cpp`, if you're interested in adding new interactivity/controls to the program.
+You also might want to look at `src/glwidget.cpp`, if you're interested in adding new interactivity/controls to the program.
 
 Speaking of controls: the controls offered by the starter code are:
  * Move Camera: WASD
@@ -133,7 +144,7 @@ Speaking of controls: the controls offered by the starter code are:
  * Toggle orbit mode: C (changes the camera from a first-person view to an orbiting camera a la what the Maya editor does)
  * Toggle between displaying the surface mesh and a wireframe of the full tet mesh: T
 
-When the program first loads, you should see a ground plane and a single tet floating in space, against a gray background.
+When the program first loads, you should see a ground plane and a single tet floating in space.
 If the tet does not display: check the console output. Most likely the .mesh file failed to load because the file couldn't be found. You'll need to set the working directory in Qt Creator to be the root directory of this repository. To do that, select "Projects" on the left-hand sidebar in Qt Creator, select "Run" under the "Build & Run options", and enter the path to the repo root in the "Working directory" field.
 
 ### Implementation & Debugging Tips
@@ -142,6 +153,7 @@ If the tet does not display: check the console output. Most likely the .mesh fil
 - If your mesh has no forces applied, the deformation gradient for each element should be the identity matrix.
 - A sanity check: try initializing the position of one or more vertices to be different than the rest configuration; verify that the mesh moves back to its rest state when you run the simulation.
 - See the lecture slides for tips on what to do if your simulation explodes.
+- Simulation will involve many parameters; you may find it helpful to use a config.ini file to set them then use QSettings [https://doc.qt.io/qt-6/qsettings.html] to extract them  
 - The lecture slides contain a few examples of material parameters. If you want more, you can check out the tables given [here](https://www.efunda.com/materials/common_matl/Common_Matl.cfm?MatlPhase=Solid&MatlProp=Mechanical) and [here](http://web.mit.edu/16.20/homepage/3_Constitutive/Constitutive_files/module_3_no_solutions.pdf). Be aware that most of these materials are very stiff and will likely be difficult to simulate in a stable manner. [This Wikipedia page](https://en.wikipedia.org/wiki/Lam%C3%A9_parameters) lists formulas for converting between different types of material parameters. What you want are “Lamé's first parameter” (that’s λ)  and “Shear modulus” (that’s μ). 
 - Here’s a set of parameters that have worked for students in previous years (with midpoint and rk4 integrators for the sphere and ellipsoid and a timestep of 0.001 in `view.cpp`):
   - const Vector3f \_gravity = Vector3f(0.f, -.1f, 0.f);
