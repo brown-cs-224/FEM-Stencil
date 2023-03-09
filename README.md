@@ -129,7 +129,7 @@ These output their own various file formats (as there is, alas, less standardiza
 ## Starter Code
 The starter code in this repo provides a simple 3D viewer for tetrahedral mesh simulations. **After cloning the repo locally, you'll need to run `git submodule update --init --recursive` to update the Eigen submodule.**
 
-As given, the starter code will load up and visualize a single tetrahedron. Your job is to modify the code to load arbitrary meshes (e.g. the ones in `/example-meshes`), extract their surface meshes for visualization, and to compute simulation time step updates to the vertex positions of the mesh.
+As given, the starter code will load up and visualize a single tetrahedron. Your job is to modify the code to load arbitrary meshes (e.g. the ones in `/example-meshes`), extract their surface meshes for visualization, and to compute simulation time step updates to the vertex positions of the mesh. Note: Your simulation does not have to support the cone mesh to receive full credit.
 
 You'll want to look at `src/simulation.cpp` to get started, as that's the only file you need to change (although you'll probably make several of your own new files, too).
 You also might want to look at `src/glwidget.cpp`, if you're interested in adding new interactivity/controls to the program.
