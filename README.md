@@ -61,7 +61,7 @@ Each of the following features that you implement will earn you extra points. Th
   * Miss programming shaders? Modify shader.frag to add some fancy effects. Skyboxes, shadows, FBO hacks, and more are all welcome.
 * A higher-order explicit integrator **(5 points)**
   * This will allow you to take larger simulation timesteps.
-  * Runge-Kutte 4
+  * Runge-Kutta 4
   * [Verlet integration](https://resources.saylor.org/wwwresources/archived/site/wp-content/uploads/2011/06/MA221-6.1.pdf)
 * Adaptive time stepping **(5 points)**
   * Take the largest time step you can take while remaining within some error threshold.
