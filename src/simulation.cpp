@@ -43,6 +43,9 @@ void Simulation::update(double seconds)
     // STUDENTS: As currently written, the program will just continually compute simulation timesteps as long
     //    as the program is running (see View::tick in view.cpp) . You might want to e.g. add a hotkey for pausing
     //    the simulation, and perhaps start the simulation out in a paused state.
+
+    // Note that the "seconds" parameter represents the amount of time that has passed since
+    // the last update
 }
 
 void Simulation::draw(Shader *shader)
