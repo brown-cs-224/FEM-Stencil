@@ -78,12 +78,8 @@ void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_shader->bind();
-    Eigen::Matrix4f m4 = Eigen::Matrix4f::Identity();
-    Eigen::Matrix3f m3 = m4.topLeftCorner(3, 3);
-    Eigen::Matrix3f invTransposeM = m3.inverse().transpose();
-    Eigen::Matrix4f mvp = m_camera.getProjection() * m_camera.getView() * m4;
-    m_shader->setUniform("invTransposeM", invTransposeM);
-    m_shader->setUniform("mvp", mvp);
+    m_shader->setUniform("proj", m_camera.getProjection());
+    m_shader->setUniform("view", m_camera.getView());
     m_sim.draw(m_shader);
     m_shader->unbind();
 }

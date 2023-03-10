@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "graphics/Shader.h"
+#include "graphics/shader.h"
 
 using namespace Eigen;
 
@@ -219,22 +219,28 @@ void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices, const std:
 
 void Shape::draw(Shader *shader)
 {
+
+    Eigen::Matrix3f m3 = m_modelMatrix.topLeftCorner(3, 3);
+    Eigen::Matrix3f inverseTransposeModel = m3.inverse().transpose();
+
     if(m_wireframe && m_tetVao != static_cast<GLuint>(-1)) {
         shader->setUniform("wire", 1);
-        shader->setUniform("m", m_modelMatrix);
-        shader->setUniform("red", 1);
+        shader->setUniform("model", m_modelMatrix);
+        shader->setUniform("inverseTransposeModel", inverseTransposeModel);
+        shader->setUniform("red",   1);
         shader->setUniform("green", 1);
-        shader->setUniform("blue", 1);
+        shader->setUniform("blue",  1);
         shader->setUniform("alpha", 1);
         glBindVertexArray(m_tetVao);
         glDrawElements(GL_LINES, m_numTetVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
         glBindVertexArray(0);
     } else {
         shader->setUniform("wire", 0);
-        shader->setUniform("m", m_modelMatrix);
-        shader->setUniform("red", m_red);
+        shader->setUniform("model", m_modelMatrix);
+        shader->setUniform("inverseTransposeModel", inverseTransposeModel);
+        shader->setUniform("red",   m_red);
         shader->setUniform("green", m_green);
-        shader->setUniform("blue", m_blue);
+        shader->setUniform("blue",  m_blue);
         shader->setUniform("alpha", m_alpha);
         glBindVertexArray(m_surfaceVao);
         glDrawElements(GL_TRIANGLES, m_numSurfaceVertices, GL_UNSIGNED_INT, reinterpret_cast<GLvoid *>(0));
