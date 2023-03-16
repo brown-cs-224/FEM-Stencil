@@ -219,7 +219,6 @@ void Shape::setVertices(const std::vector<Eigen::Vector3d> &vertices, const std:
 
 void Shape::draw(Shader *shader)
 {
-
     Eigen::Matrix3f m3 = m_modelMatrix.topLeftCorner(3, 3);
     Eigen::Matrix3f inverseTransposeModel = m3.inverse().transpose();
 
