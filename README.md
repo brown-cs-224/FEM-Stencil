@@ -73,7 +73,7 @@ Each of the following features that you implement will earn you extra points. Th
   * Even something as simple as [OpenMP’s parallel for loop](http://supercomputingblog.com/openmp/tutorial-parallel-for-loops-with-openmp/) can buy you significant speedups, if applied in the right places.
 * Interactivity **(10 points)**
   * Allow the user to poke, push, drag, etc. a deformable mesh.
-  * Please record a video of interating with mesh.
+  * Please record a video of interating with the mesh.
 * Self collisions **(15 points)**
   * Or, collisions between two deformable meshes.
   * The [O’Brien and Hodgins paper](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) has some suggestions for how to do this.
