@@ -63,17 +63,21 @@ Each of the following features that you implement will earn you extra points. Th
   * This will allow you to take larger simulation timesteps.
   * Runge-Kutta 4
   * [Verlet integration](https://resources.saylor.org/wwwresources/archived/site/wp-content/uploads/2011/06/MA221-6.1.pdf)
+  * You will be asked to show your code implementation during grading.
 * Adaptive time stepping **(5 points)**
   * Take the largest time step you can take while remaining within some error threshold.
   * [Baraff and Witkin’s](https://www.cs.cmu.edu/~baraff/sigcourse/notesb.pdf) notes are helpful here.
+  * You will be asked to show your code implementation during grading.
 * Parallelize your code **(5 points)**
   * Many simulator operations are ‘embarrassingly parallel’ (force computations, integrator steps, etc.)
   * Even something as simple as [OpenMP’s parallel for loop](http://supercomputingblog.com/openmp/tutorial-parallel-for-loops-with-openmp/) can buy you significant speedups, if applied in the right places.
 * Interactivity **(10 points)**
   * Allow the user to poke, push, drag, etc. a deformable mesh.
+  * Please record a video of interating with mesh.
 * Self collisions **(15 points)**
   * Or, collisions between two deformable meshes.
   * The [O’Brien and Hodgins paper](http://graphics.berkeley.edu/papers/Obrien-GMA-1999-08/Obrien-GMA-1999-08.pdf) has some suggestions for how to do this.
+  * Please record a video showing the collisions. 
 * Something else!
   * This list is not meant to be exhaustive--if you’ve got another advanced feature in mind, go for it! (though you may want to ask a TA or the instructor first if you’re concerned about whether the idea is feasible) 
 
