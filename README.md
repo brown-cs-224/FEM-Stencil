@@ -71,6 +71,7 @@ Each of the following features that you implement will earn you extra points. Th
 * Parallelize your code **(5 points)**
   * Many simulator operations are ‘embarrassingly parallel’ (force computations, integrator steps, etc.)
   * Even something as simple as [OpenMP’s parallel for loop](http://supercomputingblog.com/openmp/tutorial-parallel-for-loops-with-openmp/) can buy you significant speedups, if applied in the right places.
+  * You should record videos comparing execution of your code (with/without) parallelization on complicated meshes. You may find some good tetrahedral meshes [here](https://github.com/wildmeshing/fTetWild?tab=readme-ov-file) (please go to Dataset section). 
 * Interactivity **(10 points)**
   * Allow the user to poke, push, drag, etc. a deformable mesh.
   * Please record a video of interating with the mesh.
