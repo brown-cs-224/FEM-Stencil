@@ -1,8 +1,8 @@
 # Assignment 3: Finite Element Simulation (FEM)
 
-**Released:** 3/8/23
+**Released:** 3/6/24
 
-**Due:** 3/22/23 @ 11:59pm EST
+**Due:** 3/20/24 @ 11:59pm EST
 
 In this assignment, you’ll animate deformable solid objects using the Finite Element Method (FEM). The name “Finite Element Method” comes from the fact that this approach divides a continuous chunk of material into a mesh made up of a finite number of discrete elements (in this case, you’ll use tetrahedra). FEM allows for the simulation of physically-based materials in a principled way (as opposed to ad-hoc methods such as spring-and-mass simulations). You will implement the core features needed for a basic deformable object simulation (e.g. force computation, time integration, simple collision resolution) plus one or more extra features. To show off what your code can do, you’ll submit one or more videos demonstrating your simulator in action.
 
