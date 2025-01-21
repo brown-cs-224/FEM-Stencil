@@ -48,7 +48,7 @@ Your simulator must implement at least the following features:
     - your explicit integration method
     - and any extra features you choose to implement
   - Explanations should be 3 sentences each maximum
-  - List the starting lines of your implementation of these features
+  - Link the starting lines (on GitHub) of your implementation of these features
     - Extract the surface mesh from your tetrahedral mesh
     - Compute and apply force due to gravity
     - Compute and apply internal elastic forces
