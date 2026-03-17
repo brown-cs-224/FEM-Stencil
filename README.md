@@ -30,11 +30,9 @@ Your simulator must implement at least the following features:
   - A better option is to do the following for every tet vertex that inter-penetrates a collidier: (1) Project the vertex out of the collider, (2) Decompose the vertex's velocity into a a _normal component_ (i.e. parallel to surface normal of the collider at the point of intersection and a _tangential component_ (perpendicular to the collider normal), (3) Reflect the normal component of the velocity and scale by some coefficient of restitution constant between 0 and 1, (4) Scale the tangential component of the velocity by some friction constant between 0 and 1.
 - Integrate your simulation forward in time using the explicit [midpoint method](https://www.cs.cmu.edu/~baraff/sigcourse/notesb.pdf) **(10 points)** (regular Euler integration recommended to start with)
 - Video **(10 points)**
-  - You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up. Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec).
-    - There are a few different ways you might go about making such videos:
+  - You must submit at least one video demonstrating your simulator in action. The video(s) must demonstrate all of the features you have implemented (including any extra features). Particularly creative and/or nicely-rendered animations may receive extra credit. Think about interesting scenarios you could set up. Please use a standard format and codec for your video files (e.g. .mp4 with the H264 codec). There are a few different ways you might go about making such videos:
     - Screen capture an OpenGL rendering of your simulation, e.g. using the interactive viewer code that we provide below (see “Resources”).
-    - Export frame-by-frame meshes from your simulator and use your path tracer from Assignment 1 to render them.
-    - Use some other modeling/animation/rendering software to render exported meshes (e.g. Maya, Blender).
+    - Export frame-by-frame meshes from your simulator and use your path tracer from Assignment 1 or some other rendering software (e.g. Maya, Blender) to render them.
   - To turn a set of frame images into a video, you can use [FFMPEG](https://hamelot.io/visualization/using-ffmpeg-to-convert-a-set-of-images-into-a-video/).
 - README **(5 points)**
   - Your README should explain your logic for
